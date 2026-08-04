@@ -1,7 +1,6 @@
-// ===============================
+// =====================================
 // Browser / Headless Diagnostics
-// ===============================
-
+// =====================================
 
 const browserData = {
 
@@ -17,7 +16,7 @@ const browserData = {
 
     "Cookies Enabled": navigator.cookieEnabled,
 
-    "Screen Size": 
+    "Screen Size":
         screen.width + " x " + screen.height,
 
     "Window Inner Size":
@@ -28,11 +27,10 @@ const browserData = {
 };
 
 
-
 const table = document.getElementById("browserInfo");
 
 
-Object.entries(browserData).forEach(([key,value])=>{
+Object.entries(browserData).forEach(([key, value]) => {
 
     let row = table.insertRow();
 
@@ -43,56 +41,109 @@ Object.entries(browserData).forEach(([key,value])=>{
 });
 
 
+// Headless indicators
 
-// Basic automation/headless indicators
-
-let score = 0;
+let headlessScore = 0;
 
 
 if (navigator.webdriver) {
-    score++;
+    headlessScore++;
 }
 
 
 if (navigator.plugins.length === 0) {
-    score++;
+    headlessScore++;
 }
 
 
 if (window.outerWidth === 0 ||
     window.outerHeight === 0) {
 
-    score++;
+    headlessScore++;
 
 }
-
-
-
-let result;
-
-
-if(score >= 2){
-
-    result = "⚠️ Possible automation/headless indicators detected";
-
-}
-else {
-
-    result = "✅ No strong headless indicators detected";
-
-}
-
 
 
 document.getElementById(
     "headlessResult"
-).innerText = result;
+).innerText =
+headlessScore >= 2
+?
+"⚠️ Possible automation/headless indicators detected"
+:
+"✅ No strong headless indicators detected";
 
 
 
-// ===============================
+// =====================================
+// Incognito Detection
+// =====================================
+
+async function detectIncognito(){
+
+    const result =
+    document.getElementById(
+        "incognitoResult"
+    );
+
+
+    if (!result) {
+        return;
+    }
+
+
+    try {
+
+
+        const storage =
+        await navigator.storage.estimate();
+
+
+        let quota = storage.quota;
+
+
+        /*
+        Chrome Incognito normally provides
+        a much smaller temporary storage quota.
+        */
+
+
+        if (quota && quota < 1200000000) {
+
+
+            result.innerText =
+            "⚠️ Possible Incognito Mode detected";
+
+
+        } else {
+
+
+            result.innerText =
+            "✅ Normal browser mode detected";
+
+
+        }
+
+
+    } catch(error){
+
+
+        result.innerText =
+        "⚠️ Unable to determine browser mode";
+
+
+    }
+
+}
+
+
+detectIncognito();
+
+
+
+// =====================================
 // Local Storage Test
-// ===============================
+// =====================================
 
 
 function saveStorage(){
@@ -113,7 +164,6 @@ function saveStorage(){
         "storageStatus"
     ).innerText =
     "Saved successfully";
-
 
 }
 
@@ -160,9 +210,9 @@ function clearStorage(){
 
 
 
-// ===============================
+// =====================================
 // Geolocation
-// ===============================
+// =====================================
 
 
 function requestLocation(){
@@ -176,8 +226,10 @@ function requestLocation(){
 
     if(!navigator.geolocation){
 
+
         output.innerText =
         "Geolocation not supported";
+
 
         return;
 
@@ -213,7 +265,6 @@ function requestLocation(){
 
 
         }
-
 
     );
 
