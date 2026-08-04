@@ -1,169 +1,208 @@
-// =====================================
-// Browser / Headless Diagnostics
-// =====================================
+// ===============================
+// Browser Diagnostics
+// ===============================
+
 
 const browserData = {
 
-    "User Agent": navigator.userAgent,
 
-    "Browser Language": navigator.language,
+"User Agent":
+navigator.userAgent,
 
-    "Platform": navigator.platform,
 
-    "Navigator webdriver": navigator.webdriver,
+"Language":
+navigator.language,
 
-    "Plugins": navigator.plugins.length,
 
-    "Cookies Enabled": navigator.cookieEnabled,
+"Platform":
+navigator.platform,
 
-    "Screen Size":
-        screen.width + " x " + screen.height,
 
-    "Window Inner Size":
-        window.innerWidth + " x " + window.innerHeight,
+"webdriver":
+navigator.webdriver,
 
-    "Window Outer Size":
-        window.outerWidth + " x " + window.outerHeight
+
+"Plugins":
+navigator.plugins.length,
+
+
+"Cookies":
+navigator.cookieEnabled,
+
+
+"Screen":
+screen.width+" x "+screen.height,
+
+
+"Window Inner":
+window.innerWidth+" x "+window.innerHeight,
+
+
+"Window Outer":
+window.outerWidth+" x "+window.outerHeight
+
 };
 
 
-const table = document.getElementById("browserInfo");
+
+const table =
+document.getElementById(
+"browserInfo"
+);
 
 
-Object.entries(browserData).forEach(([key, value]) => {
 
-    let row = table.insertRow();
+Object.entries(browserData)
+.forEach(([key,value])=>{
 
-    row.insertCell(0).innerText = key;
 
-    row.insertCell(1).innerText = value;
+let row =
+table.insertRow();
+
+
+row.insertCell(0).innerText=key;
+
+
+row.insertCell(1).innerText=value;
+
 
 });
 
 
-// Headless indicators
-
-let headlessScore = 0;
 
 
-if (navigator.webdriver) {
-    headlessScore++;
-}
+// ===============================
+// Headless Detection
+// ===============================
 
 
-if (navigator.plugins.length === 0) {
-    headlessScore++;
-}
+let headlessScore=0;
 
 
-if (window.outerWidth === 0 ||
-    window.outerHeight === 0) {
+if(navigator.webdriver)
+headlessScore++;
 
-    headlessScore++;
 
-}
+if(navigator.plugins.length===0)
+headlessScore++;
+
+
+if(window.outerWidth===0 ||
+window.outerHeight===0)
+headlessScore++;
+
 
 
 document.getElementById(
-    "headlessResult"
+"headlessResult"
 ).innerText =
-headlessScore >= 2
+
+headlessScore>=2
+
 ?
-"⚠️ Possible automation/headless indicators detected"
+
+"⚠️ Possible Headless / Automation"
+
 :
-"✅ No strong headless indicators detected";
+
+"✅ Normal Browser Indicators";
 
 
 
-// =====================================
-// Incognito Detection
-// =====================================
+
+
+// ===============================
+// Incognito Heuristic
+// ===============================
+
 
 async function detectIncognito(){
 
-    const result =
-    document.getElementById(
-        "incognitoResult"
-    );
+
+const output =
+document.getElementById(
+"incognitoResult"
+);
 
 
-    if (!result) {
-        return;
-    }
+
+try {
 
 
-    try {
+const estimate =
+await navigator.storage.estimate();
 
 
-        const storage =
-        await navigator.storage.estimate();
+
+if(
+estimate.quota &&
+estimate.quota < 1200000000
+){
 
 
-        let quota = storage.quota;
+output.innerText =
+"⚠️ Possible Incognito Mode";
 
-
-        /*
-        Chrome Incognito normally provides
-        a much smaller temporary storage quota.
-        */
-
-
-        if (quota && quota < 1200000000) {
-
-
-            result.innerText =
-            "⚠️ Possible Incognito Mode detected";
-
-
-        } else {
-
-
-            result.innerText =
-            "✅ Normal browser mode detected";
-
-
-        }
-
-
-    } catch(error){
-
-
-        result.innerText =
-        "⚠️ Unable to determine browser mode";
-
-
-    }
 
 }
+
+else {
+
+
+output.innerText =
+"✅ Normal Browser Mode";
+
+
+}
+
+
+
+}
+
+catch(e){
+
+
+output.innerText =
+"Unable to detect";
+
+
+}
+
+
+}
+
 
 
 detectIncognito();
 
 
 
-// =====================================
-// Local Storage Test
-// =====================================
+
+
+// ===============================
+// Storage
+// ===============================
 
 
 function saveStorage(){
 
-    const value =
-    document.getElementById(
-        "storageInput"
-    ).value;
+
+localStorage.setItem(
+
+"qa-value",
+
+document.getElementById(
+"storageInput"
+).value
+
+);
 
 
-    localStorage.setItem(
-        "qa-test-value",
-        value
-    );
+document.getElementById(
+"storageStatus"
+).innerText =
+"Saved";
 
-
-    document.getElementById(
-        "storageStatus"
-    ).innerText =
-    "Saved successfully";
 
 }
 
@@ -172,20 +211,16 @@ function saveStorage(){
 function loadStorage(){
 
 
-    const value =
-    localStorage.getItem(
-        "qa-test-value"
-    );
+document.getElementById(
+"storageStatus"
+).innerText =
 
 
-    document.getElementById(
-        "storageStatus"
-    ).innerText =
-    value
-    ?
-    "Loaded value: " + value
-    :
-    "No stored value found";
+localStorage.getItem(
+"qa-value"
+)
+
+|| "No value";
 
 
 }
@@ -195,78 +230,186 @@ function loadStorage(){
 function clearStorage(){
 
 
-    localStorage.removeItem(
-        "qa-test-value"
-    );
+localStorage.clear();
 
 
-    document.getElementById(
-        "storageStatus"
-    ).innerText =
-    "Storage cleared";
+document.getElementById(
+"storageStatus"
+).innerText =
+"Cleared";
 
 
 }
 
 
 
-// =====================================
+
+
+// ===============================
 // Geolocation
-// =====================================
+// ===============================
 
 
 function requestLocation(){
 
 
-    const output =
-    document.getElementById(
-        "geoStatus"
-    );
+navigator.geolocation.getCurrentPosition(
+
+(position)=>{
 
 
-    if(!navigator.geolocation){
+document.getElementById(
+"geoStatus"
+).innerText =
+
+"Allowed\nLatitude: "
+
++position.coords.latitude+
+
+"\nLongitude: "
+
++position.coords.longitude;
 
 
-        output.innerText =
-        "Geolocation not supported";
+},
 
 
-        return;
-
-    }
+(error)=>{
 
 
+document.getElementById(
+"geoStatus"
+).innerText =
 
-    navigator.geolocation.getCurrentPosition(
-
-        function(position){
-
-
-            output.innerText =
-            "Permission: ALLOWED\n\n" +
-
-            "Latitude: " +
-            position.coords.latitude +
-
-            "\nLongitude: " +
-            position.coords.longitude;
-
-
-        },
-
-
-        function(error){
-
-
-            output.innerText =
-            "Permission BLOCKED\n\n" +
-
-            error.message;
-
-
-        }
-
-    );
+"Blocked\n"+error.message;
 
 
 }
+
+
+);
+
+
+}
+
+
+
+
+
+// ===============================
+// Click Playground
+// ===============================
+
+
+
+document
+.getElementById(
+"normalButton"
+)
+.onclick=function(){
+
+
+document.getElementById(
+"normalResult"
+).innerText =
+"Normal click executed";
+
+
+};
+
+
+
+
+document
+.getElementById(
+"overlayButton"
+)
+.onclick=function(){
+
+
+document.getElementById(
+"overlayResult"
+).innerText =
+"Button received click";
+
+
+};
+
+
+
+
+document
+.querySelector(
+".overlay"
+)
+.onclick=function(){
+
+
+document.getElementById(
+"overlayResult"
+).innerText =
+"Overlay intercepted click";
+
+
+};
+
+
+
+
+
+document
+.getElementById(
+"movingButton"
+)
+.onclick=function(){
+
+
+document.getElementById(
+"movingResult"
+).innerText =
+"Moving button clicked";
+
+
+};
+
+
+
+document
+.getElementById(
+"disabledPointer"
+)
+.onclick=function(){
+
+
+document.getElementById(
+"pointerResult"
+).innerText =
+"Clicked";
+
+
+};
+
+
+
+
+
+let move=false;
+
+
+setInterval(()=>{
+
+
+const button =
+document.getElementById(
+"movingButton"
+);
+
+
+move=!move;
+
+
+button.style.left =
+move ? "100px" : "0px";
+
+
+},2000);
