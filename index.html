@@ -2,268 +2,178 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>QA Browser Playground</title>
 
 <link rel="stylesheet" href="styles.css">
-
 </head>
 
-
 <body>
-
 
 <h1>QA Browser Playground</h1>
 
 
+<!-- HEADLESS -->
 
 <section class="card">
 
-<h2>Browser / Headless Diagnostics</h2>
+<h2>1. Headless Mode Detection</h2>
+
+<div id="headlessResult">
+Checking...
+</div>
 
 <table id="browserInfo"></table>
 
-<h3 id="headlessResult">
+</section>
+
+
+
+<!-- INCOGNITO -->
+
+<section class="card">
+
+<h2>2. Incognito Mode Detection</h2>
+
+<div id="incognitoResult">
 Checking...
+</div>
+
+</section>
+
+
+
+
+<!-- CLICKS -->
+
+<section class="card">
+
+<h2>3. Click Processing Validation</h2>
+
+<p>
+Click the button using testRigor with:
+<br>
+- Using JavaScript
+<br>
+- Using OS Mouse
+</p>
+
+
+<button id="clickButton">
+Click Validation Button
+</button>
+
+
+<div class="result-box">
+
+<p id="clickResult">
+Waiting for click...
+</p>
+
+</div>
+
+
+</section>
+
+
+
+
+
+<!-- SCREENSHOT -->
+
+<section class="card screenshot-test">
+
+<h2>4. Screenshot Validation</h2>
+
+
+<h3 id="topMarker">
+===== TOP MARKER =====
 </h3>
 
-</section>
 
+<div class="big-space">
 
-
-
-<section class="card">
-
-<h2>Incognito Detection</h2>
-
-<p id="incognitoResult">
-Checking browser mode...
-</p>
-
-</section>
-
-
-
-
-
-<section class="card">
-
-<h2>Storage Persistence Test</h2>
-
-
-<input 
-id="storageInput"
-placeholder="Enter value">
-
-
-<br>
-
-
-<button onclick="saveStorage()">
-Save
-</button>
-
-
-<button onclick="loadStorage()">
-Load
-</button>
-
-
-<button onclick="clearStorage()">
-Clear
-</button>
-
-
-<p id="storageStatus"></p>
-
-
-</section>
-
-
-
-
-
-<section class="card">
-
-<h2>Geolocation Test</h2>
-
-
-<button onclick="requestLocation()">
-Request Location
-</button>
-
-
-<p id="geoStatus"></p>
-
-
-</section>
-
-
-
-
-
-
-<section class="card">
-
-
-<h2>
-Click Processing Playground
-</h2>
-
-
-
-<h3>Normal Button</h3>
-
-
-<button id="normalButton">
-Normal Click
-</button>
-
-
-<p id="normalResult"></p>
-
-
-
-
-
-<h3>Overlay Button</h3>
-
-
-<div class="click-container">
-
-
-<button id="overlayButton">
-Real Button
-</button>
-
-
-<div class="overlay">
-Overlay Layer
-</div>
-
+Scroll area for full page screenshot validation
 
 </div>
 
 
-<p id="overlayResult"></p>
+<h3 id="bottomMarker">
+===== BOTTOM MARKER =====
+</h3>
 
 
-
-
-
-
-<h3>Moving Button</h3>
-
-
-<button id="movingButton">
-Moving Button
-</button>
-
-
-<p id="movingResult"></p>
-
-
-
-
-
-
-
-<h3>Pointer Events None</h3>
-
-
-<button id="disabledPointer">
-Cannot Receive Click
-</button>
-
-
-<p id="pointerResult"></p>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="card">
-
-
-<h2>
-Opacity Visibility Test
-</h2>
-
-
-
-<div class="test-box opacity100">
-
-Opacity 1
-
-</div>
-
-
-
-
-<div class="test-box opacity50">
-
-Opacity 0.5
-
-</div>
-
-
-
-
-<div class="test-box opacity01">
-
-Opacity 0.01
-
-</div>
-
-
-
-
-<div class="test-box opacity0">
-
-Opacity 0
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-
-
-<section class="card long-page">
-
-
-<h2>
-Full Page Screenshot Test
-</h2>
-
-
-<p>
-TOP OF PAGE
+<p id="screenshotResult">
+Page height:
 </p>
 
 
-<div class="space"></div>
+</section>
 
 
-<p>
-BOTTOM OF PAGE
-</p>
+
+
+
+<!-- GEOLOCATION -->
+
+<section class="card">
+
+<h2>5. Geolocation Validation</h2>
+
+
+<button onclick="checkGeolocation()">
+Check Geolocation
+</button>
+
+
+<div id="geoResult">
+Waiting...
+</div>
+
+
+</section>
+
+
+
+
+
+<!-- OPACITY -->
+
+<section class="card">
+
+<h2>6. Opacity Visibility Validation</h2>
+
+
+<div class="opacity-item opacity-one">
+
+Element opacity 1
+
+</div>
+
+
+
+<div class="opacity-item opacity-half">
+
+Element opacity 0.5
+
+</div>
+
+
+
+<div class="opacity-item opacity-zero">
+
+Element opacity 0
+
+</div>
+
+
+<div id="opacityResult">
+
+Checking visibility...
+
+</div>
 
 
 </section>
@@ -273,7 +183,6 @@ BOTTOM OF PAGE
 
 
 <script src="script.js"></script>
-
 
 </body>
 
