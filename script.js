@@ -1,92 +1,221 @@
-const browserInfo = {
-"User Agent": navigator.userAgent,
-"navigator.webdriver": navigator.webdriver,
-"Language": navigator.language,
-"Platform": navigator.platform,
-"Plugins": navigator.plugins.length,
-"Cookies Enabled": navigator.cookieEnabled,
-"Hardware Concurrency": navigator.hardwareConcurrency,
-"Device Memory": navigator.deviceMemory ?? "Unknown",
-"Inner Size": window.innerWidth + " x " + window.innerHeight,
-"Outer Size": window.outerWidth + " x " + window.outerHeight
+// ===============================
+// Browser / Headless Diagnostics
+// ===============================
+
+
+const browserData = {
+
+    "User Agent": navigator.userAgent,
+
+    "Browser Language": navigator.language,
+
+    "Platform": navigator.platform,
+
+    "Navigator webdriver": navigator.webdriver,
+
+    "Plugins": navigator.plugins.length,
+
+    "Cookies Enabled": navigator.cookieEnabled,
+
+    "Screen Size": 
+        screen.width + " x " + screen.height,
+
+    "Window Inner Size":
+        window.innerWidth + " x " + window.innerHeight,
+
+    "Window Outer Size":
+        window.outerWidth + " x " + window.outerHeight
 };
 
-const table=document.getElementById("browserTable");
 
-for(const [k,v] of Object.entries(browserInfo)){
-let row=table.insertRow();
-row.insertCell().innerText=k;
-row.insertCell().innerText=v;
+
+const table = document.getElementById("browserInfo");
+
+
+Object.entries(browserData).forEach(([key,value])=>{
+
+    let row = table.insertRow();
+
+    row.insertCell(0).innerText = key;
+
+    row.insertCell(1).innerText = value;
+
+});
+
+
+
+// Basic automation/headless indicators
+
+let score = 0;
+
+
+if (navigator.webdriver) {
+    score++;
 }
 
-document.getElementById("webdriver").innerText=navigator.webdriver;
 
-let score=0;
-
-if(navigator.webdriver) score++;
-if(navigator.plugins.length===0) score++;
-if(window.outerWidth===0) score++;
-if(window.outerHeight===0) score++;
-
-document.getElementById("score").innerText=score+"/4";
-
-document.getElementById("headless").innerText=
-score>=2?"HIGH":"LOW";
-
-function saveLocal(){
-localStorage.setItem("qa-test",
-document.getElementById("localInput").value);
-document.getElementById("localResult").innerText="Saved";
+if (navigator.plugins.length === 0) {
+    score++;
 }
 
-function loadLocal(){
-document.getElementById("localResult").innerText=
-localStorage.getItem("qa-test");
-}
 
-function clearLocal(){
-localStorage.removeItem("qa-test");
-document.getElementById("localResult").innerText="Cleared";
-}
+if (window.outerWidth === 0 ||
+    window.outerHeight === 0) {
 
-function saveSession(){
-sessionStorage.setItem("qa-session",
-document.getElementById("sessionInput").value);
-document.getElementById("sessionResult").innerText="Saved";
-}
-
-function loadSession(){
-document.getElementById("sessionResult").innerText=
-sessionStorage.getItem("qa-session");
-}
-
-function clearSession(){
-sessionStorage.removeItem("qa-session");
-document.getElementById("sessionResult").innerText="Cleared";
-}
-
-function saveCookie(){
-document.cookie="qatest="+
-document.getElementById("cookieInput").value+
-";path=/";
-document.getElementById("cookieResult").innerText="Saved";
-}
-
-function loadCookie(){
-
-const cookie=document.cookie
-.split("; ")
-.find(c=>c.startsWith("qatest="));
-
-document.getElementById("cookieResult").innerText=
-cookie?cookie.split("=")[1]:"Not Found";
+    score++;
 
 }
 
-function clearCookie(){
 
-document.cookie="qatest=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
 
-document.getElementById("cookieResult").innerText="Cleared";
+let result;
+
+
+if(score >= 2){
+
+    result = "⚠️ Possible automation/headless indicators detected";
+
+}
+else {
+
+    result = "✅ No strong headless indicators detected";
+
+}
+
+
+
+document.getElementById(
+    "headlessResult"
+).innerText = result;
+
+
+
+// ===============================
+// Local Storage Test
+// ===============================
+
+
+function saveStorage(){
+
+    const value =
+    document.getElementById(
+        "storageInput"
+    ).value;
+
+
+    localStorage.setItem(
+        "qa-test-value",
+        value
+    );
+
+
+    document.getElementById(
+        "storageStatus"
+    ).innerText =
+    "Saved successfully";
+
+
+}
+
+
+
+function loadStorage(){
+
+
+    const value =
+    localStorage.getItem(
+        "qa-test-value"
+    );
+
+
+    document.getElementById(
+        "storageStatus"
+    ).innerText =
+    value
+    ?
+    "Loaded value: " + value
+    :
+    "No stored value found";
+
+
+}
+
+
+
+function clearStorage(){
+
+
+    localStorage.removeItem(
+        "qa-test-value"
+    );
+
+
+    document.getElementById(
+        "storageStatus"
+    ).innerText =
+    "Storage cleared";
+
+
+}
+
+
+
+// ===============================
+// Geolocation
+// ===============================
+
+
+function requestLocation(){
+
+
+    const output =
+    document.getElementById(
+        "geoStatus"
+    );
+
+
+    if(!navigator.geolocation){
+
+        output.innerText =
+        "Geolocation not supported";
+
+        return;
+
+    }
+
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+
+            output.innerText =
+            "Permission: ALLOWED\n\n" +
+
+            "Latitude: " +
+            position.coords.latitude +
+
+            "\nLongitude: " +
+            position.coords.longitude;
+
+
+        },
+
+
+        function(error){
+
+
+            output.innerText =
+            "Permission BLOCKED\n\n" +
+
+            error.message;
+
+
+        }
+
+
+    );
+
 
 }
