@@ -1,1 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Browser Playground</title>
+<link rel="stylesheet" href="styles.css">
+</head>
 
+<body>
+
+<h1>QA Browser Playground</h1>
+
+<div class="card">
+<h2>Browser Information</h2>
+<table id="browserTable"></table>
+</div>
+
+<div class="card">
+<h2>Automation Detection</h2>
+
+<p><b>navigator.webdriver:</b> <span id="webdriver"></span></p>
+
+<p><b>Automation Score:</b> <span id="score"></span></p>
+
+<p><b>Headless Suspicion:</b> <span id="headless"></span></p>
+
+</div>
+
+<div class="card">
+
+<h2>Local Storage</h2>
+
+<input id="localInput" placeholder="Type something">
+
+<button onclick="saveLocal()">Save</button>
+
+<button onclick="loadLocal()">Load</button>
+
+<button onclick="clearLocal()">Clear</button>
+
+<p id="localResult"></p>
+
+</div>
+
+<div class="card">
+
+<h2>Session Storage</h2>
+
+<input id="sessionInput" placeholder="Type something">
+
+<button onclick="saveSession()">Save</button>
+
+<button onclick="loadSession()">Load</button>
+
+<button onclick="clearSession()">Clear</button>
+
+<p id="sessionResult"></p>
+
+</div>
+
+<div class="card">
+
+<h2>Cookies</h2>
+
+<input id="cookieInput" placeholder="Cookie value">
+
+<button onclick="saveCookie()">Save</button>
+
+<button onclick="loadCookie()">Load</button>
+
+<button onclick="clearCookie()">Clear</button>
+
+<p id="cookieResult"></p>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
