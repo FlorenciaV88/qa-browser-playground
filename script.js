@@ -1,94 +1,54 @@
 // ===============================
-// Browser Diagnostics
+// HEADLESS DETECTION
 // ===============================
 
 
-const browserData = {
-
-
-"User Agent":
-navigator.userAgent,
-
-
-"Language":
-navigator.language,
-
-
-"Platform":
-navigator.platform,
-
+const info = {
 
 "webdriver":
 navigator.webdriver,
 
-
-"Plugins":
+"plugins":
 navigator.plugins.length,
 
+"language":
+navigator.language,
 
-"Cookies":
-navigator.cookieEnabled,
+"userAgent":
+navigator.userAgent,
 
-
-"Screen":
-screen.width+" x "+screen.height,
-
-
-"Window Inner":
-window.innerWidth+" x "+window.innerHeight,
-
-
-"Window Outer":
-window.outerWidth+" x "+window.outerHeight
+"window size":
+window.innerWidth + " x " + window.innerHeight
 
 };
 
 
-
 const table =
-document.getElementById(
-"browserInfo"
-);
+document.getElementById("browserInfo");
 
 
-
-Object.entries(browserData)
-.forEach(([key,value])=>{
+Object.entries(info).forEach(([key,value])=>{
 
 
-let row =
-table.insertRow();
+let row = table.insertRow();
 
+row.insertCell(0).innerText = key;
 
-row.insertCell(0).innerText=key;
-
-
-row.insertCell(1).innerText=value;
+row.insertCell(1).innerText = value;
 
 
 });
 
 
 
-
-// ===============================
-// Headless Detection
-// ===============================
-
-
-let headlessScore=0;
+let headlessScore = 0;
 
 
 if(navigator.webdriver)
 headlessScore++;
 
 
-if(navigator.plugins.length===0)
-headlessScore++;
-
-
-if(window.outerWidth===0 ||
-window.outerHeight===0)
+if(navigator.plugins.length === 0)
 headlessScore++;
 
 
@@ -97,29 +57,30 @@ document.getElementById(
 "headlessResult"
 ).innerText =
 
-headlessScore>=2
+
+headlessScore > 0
 
 ?
 
-"⚠️ Possible Headless / Automation"
+"⚠️ Possible Headless Browser Detected"
 
 :
 
-"✅ Normal Browser Indicators";
+"✅ Browser appears NOT headless";
 
 
 
 
 
 // ===============================
-// Incognito Heuristic
+// INCOGNITO DETECTION
 // ===============================
 
 
 async function detectIncognito(){
 
 
-const output =
+const result =
 document.getElementById(
 "incognitoResult"
 );
@@ -129,18 +90,16 @@ document.getElementById(
 try {
 
 
-const estimate =
+const storage =
 await navigator.storage.estimate();
 
 
 
-if(
-estimate.quota &&
-estimate.quota < 1200000000
-){
+if(storage.quota &&
+storage.quota < 1200000000){
 
 
-output.innerText =
+result.innerText =
 "⚠️ Possible Incognito Mode";
 
 
@@ -149,7 +108,7 @@ output.innerText =
 else {
 
 
-output.innerText =
+result.innerText =
 "✅ Normal Browser Mode";
 
 
@@ -159,10 +118,10 @@ output.innerText =
 
 }
 
-catch(e){
+catch(error){
 
 
-output.innerText =
+result.innerText =
 "Unable to detect";
 
 
@@ -172,7 +131,6 @@ output.innerText =
 }
 
 
-
 detectIncognito();
 
 
@@ -180,95 +138,124 @@ detectIncognito();
 
 
 // ===============================
-// Storage
+// CLICK VALIDATION
 // ===============================
 
 
-function saveStorage(){
-
-
-localStorage.setItem(
-
-"qa-value",
-
+const clickButton =
 document.getElementById(
-"storageInput"
-).value
-
+"clickButton"
 );
 
 
-document.getElementById(
-"storageStatus"
-).innerText =
-"Saved";
 
-
-}
-
-
-
-function loadStorage(){
+clickButton.addEventListener(
+"click",
+function(event){
 
 
 document.getElementById(
-"storageStatus"
-).innerText =
+"clickResult"
+).innerHTML =
 
 
-localStorage.getItem(
-"qa-value"
-)
+`
+<b>Click received</b><br><br>
 
-|| "No value";
+Event trusted:
+${event.isTrusted}
 
+<br>
 
-}
+Event type:
+${event.type}
 
+<br>
 
+Coordinates:
+X ${event.clientX}
+Y ${event.clientY}
 
-function clearStorage(){
-
-
-localStorage.clear();
-
-
-document.getElementById(
-"storageStatus"
-).innerText =
-"Cleared";
+`;
 
 
-}
+
+});
 
 
 
 
 
 // ===============================
-// Geolocation
+// SCREENSHOT
 // ===============================
 
 
-function requestLocation(){
+document.getElementById(
+"screenshotResult"
+).innerText =
+
+"Page height: "
++
+document.body.scrollHeight
++
+" px";
+
+
+
+
+
+// ===============================
+// GEOLOCATION
+// ===============================
+
+
+async function checkGeolocation(){
+
+
+const output =
+document.getElementById(
+"geoResult"
+);
+
+
+
+if(!navigator.geolocation){
+
+
+output.innerText =
+"Geolocation not supported";
+
+
+return;
+
+}
+
 
 
 navigator.geolocation.getCurrentPosition(
 
+
 (position)=>{
 
 
-document.getElementById(
-"geoStatus"
-).innerText =
+output.innerHTML =
 
-"Allowed\nLatitude: "
+`
+Permission: GRANTED
 
-+position.coords.latitude+
+<br>
 
-"\nLongitude: "
+Latitude:
+${position.coords.latitude}
 
-+position.coords.longitude;
+<br>
+
+Longitude:
+${position.coords.longitude}
+
+`;
+
 
 
 },
@@ -277,11 +264,16 @@ document.getElementById(
 (error)=>{
 
 
-document.getElementById(
-"geoStatus"
-).innerText =
+output.innerHTML =
 
-"Blocked\n"+error.message;
+`
+Permission: DENIED
+
+<br>
+
+${error.message}
+
+`;
 
 
 }
@@ -296,120 +288,72 @@ document.getElementById(
 
 
 
+
 // ===============================
-// Click Playground
+// OPACITY
 // ===============================
 
 
-
-document
-.getElementById(
-"normalButton"
-)
-.onclick=function(){
+function checkOpacity(){
 
 
-document.getElementById(
-"normalResult"
-).innerText =
-"Normal click executed";
-
-
-};
-
-
-
-
-document
-.getElementById(
-"overlayButton"
-)
-.onclick=function(){
-
-
-document.getElementById(
-"overlayResult"
-).innerText =
-"Button received click";
-
-
-};
-
-
-
-
-document
-.querySelector(
-".overlay"
-)
-.onclick=function(){
-
-
-document.getElementById(
-"overlayResult"
-).innerText =
-"Overlay intercepted click";
-
-
-};
-
-
-
-
-
-document
-.getElementById(
-"movingButton"
-)
-.onclick=function(){
-
-
-document.getElementById(
-"movingResult"
-).innerText =
-"Moving button clicked";
-
-
-};
-
-
-
-document
-.getElementById(
-"disabledPointer"
-)
-.onclick=function(){
-
-
-document.getElementById(
-"pointerResult"
-).innerText =
-"Clicked";
-
-
-};
-
-
-
-
-
-let move=false;
-
-
-setInterval(()=>{
-
-
-const button =
-document.getElementById(
-"movingButton"
+const elements =
+document.querySelectorAll(
+".opacity-item"
 );
 
 
-move=!move;
+
+let result = "";
 
 
-button.style.left =
-move ? "100px" : "0px";
+
+elements.forEach((element,index)=>{
 
 
-},2000);
+const opacity =
+window.getComputedStyle(
+element
+).opacity;
+
+
+
+const visible =
+opacity > 0;
+
+
+
+result +=
+
+`
+Element ${index+1}
+
+<br>
+
+Opacity:
+${opacity}
+
+<br>
+
+Visible:
+${visible}
+
+<br><br>
+
+`;
+
+
+});
+
+
+
+document.getElementById(
+"opacityResult"
+).innerHTML = result;
+
+
+}
+
+
+
+checkOpacity();
