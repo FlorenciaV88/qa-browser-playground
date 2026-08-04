@@ -140,8 +140,11 @@ Steps:
 qa-browser-playground/
 
 ├── index.html
+
 ├── styles.css
+
 ├── script.js
+
 └── README.md
 
 
