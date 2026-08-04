@@ -25,32 +25,25 @@
 
 <h2>Browser / Headless Diagnostics</h2>
 
-
 <table id="browserInfo"></table>
-
 
 <h3 id="headlessResult">
 Checking...
 </h3>
 
-
 </section>
-
 
 
 
 
 <section class="card">
 
-
 <h2>Incognito Detection</h2>
-
 
 <p id="incognitoResult">
 Checking browser mode...
 </p>
 
-
 </section>
 
 
@@ -59,12 +52,11 @@ Checking browser mode...
 
 <section class="card">
 
-
-<h2>Incognito / Storage Validation</h2>
+<h2>Storage Persistence Test</h2>
 
 
 <input 
-id="storageInput" 
+id="storageInput"
 placeholder="Enter value">
 
 
@@ -72,12 +64,12 @@ placeholder="Enter value">
 
 
 <button onclick="saveStorage()">
-Save LocalStorage
+Save
 </button>
 
 
 <button onclick="loadStorage()">
-Load LocalStorage
+Load
 </button>
 
 
@@ -97,8 +89,7 @@ Clear
 
 <section class="card">
 
-
-<h2>Geolocation</h2>
+<h2>Geolocation Test</h2>
 
 
 <button onclick="requestLocation()">
@@ -115,10 +106,99 @@ Request Location
 
 
 
+
 <section class="card">
 
 
-<h2>Opacity Visibility</h2>
+<h2>
+Click Processing Playground
+</h2>
+
+
+
+<h3>Normal Button</h3>
+
+
+<button id="normalButton">
+Normal Click
+</button>
+
+
+<p id="normalResult"></p>
+
+
+
+
+
+<h3>Overlay Button</h3>
+
+
+<div class="click-container">
+
+
+<button id="overlayButton">
+Real Button
+</button>
+
+
+<div class="overlay">
+Overlay Layer
+</div>
+
+
+</div>
+
+
+<p id="overlayResult"></p>
+
+
+
+
+
+
+<h3>Moving Button</h3>
+
+
+<button id="movingButton">
+Moving Button
+</button>
+
+
+<p id="movingResult"></p>
+
+
+
+
+
+
+
+<h3>Pointer Events None</h3>
+
+
+<button id="disabledPointer">
+Cannot Receive Click
+</button>
+
+
+<p id="pointerResult"></p>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+<section class="card">
+
+
+<h2>
+Opacity Visibility Test
+</h2>
 
 
 
@@ -196,6 +276,5 @@ BOTTOM OF PAGE
 
 
 </body>
-
 
 </html>
