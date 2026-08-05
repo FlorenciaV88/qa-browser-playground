@@ -71,97 +71,48 @@ Object.entries(browserInfo).forEach(([key,value])=>{
 // Headless Mode Detection
 // ----------------------------
 
+// ----------------------------
+// Headless Mode Detection - DEBUG
+// ----------------------------
+
 const headlessResult =
 document.getElementById("headlessResult");
 
 
-const headlessIndicators = {
-
-    webdriver:
-        navigator.webdriver,
-
-    plugins:
-        navigator.plugins.length,
-
-    languages:
-        navigator.languages.length,
-
-    windowSize:
-        `${window.innerWidth} x ${window.innerHeight}`,
-
-    outerWindow:
-        `${window.outerWidth} x ${window.outerHeight}`
-
-};
-
-
-let detected = false;
-
-
-let reasons = [];
-
-
-// webdriver alone is NOT enough
-if(navigator.webdriver === true){
-
-    reasons.push("webdriver");
-
-}
-
-
-// Headless Chrome usually has missing plugins
-if(navigator.plugins.length === 0){
-
-    reasons.push("no plugins");
-
-}
-
-
-// Headless often has no outer window size
-if(
-    window.outerWidth === 0 ||
-    window.outerHeight === 0
-){
-
-    reasons.push("missing outer window");
-
-}
-
-
-// Detect only if multiple indicators match
-if(reasons.length >= 2){
-
-    detected = true;
-
-}
-
 headlessResult.innerHTML =
 
 `
-<b>Headless Mode Analysis</b>
+<b>Headless Debug</b>
 
-Indicators:
-
-${reasons.length ? reasons.join(", ") : "none"}
+webdriver:
+${navigator.webdriver}
 
 <br><br>
 
-${
-detected
-? "🔴 Headless Mode: DETECTED"
-: "🟢 Headless Mode: NOT DETECTED"
-}
+plugins:
+${navigator.plugins.length}
+
+<br><br>
+
+outerWidth:
+${window.outerWidth}
+
+<br><br>
+
+outerHeight:
+${window.outerHeight}
+
+<br><br>
+
+innerWidth:
+${window.innerWidth}
+
+<br><br>
+
+innerHeight:
+${window.innerHeight}
 
 `;
-
-
-updateSummary(
-    "summaryHeadless",
-    detected ? "🔴" : "🟢",
-    detected ? "Detected" : "Not Detected"
-);
-
-
 // ----------------------------
 // Incognito
 // ----------------------------
