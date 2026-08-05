@@ -75,42 +75,56 @@ Object.entries(browserInfo).forEach(([key,value])=>{
 // Headless Mode Detection - DEBUG
 // ----------------------------
 
+// ----------------------------
+// Headless Mode Detection
+// ----------------------------
+
 const headlessResult =
 document.getElementById("headlessResult");
+
+
+const userAgent = navigator.userAgent;
+
+
+let headlessDetected = false;
+
+
+// Chrome Headless normally exposes this in the UA
+if(userAgent.toLowerCase().includes("headless")){
+    headlessDetected = true;
+}
 
 
 headlessResult.innerHTML =
 
 `
-<b>Headless Debug</b>
+<b>Headless Mode Check</b>
 
-webdriver:
-${navigator.webdriver}
+User Agent:
 
-<br><br>
+${userAgent}
 
-plugins:
-${navigator.plugins.length}
 
 <br><br>
 
-outerWidth:
-${window.outerWidth}
+Result:
 
-<br><br>
+${
+headlessDetected
+?
+"🔴 Headless Mode: DETECTED"
+:
+"🟢 Headless Mode: NOT DETECTED"
+}
 
-outerHeight:
-${window.outerHeight}
+`;
 
-<br><br>
 
-innerWidth:
-${window.innerWidth}
-
-<br><br>
-
-innerHeight:
-${window.innerHeight}
+updateSummary(
+    "summaryHeadless",
+    headlessDetected ? "🔴" : "🟢",
+    headlessDetected ? "Detected" : "Not Detected"
+);
 
 `;
 // ----------------------------
