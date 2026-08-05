@@ -192,115 +192,79 @@ ${Math.round(estimate.quota/1024/1024)} MB`;
 
 detectIncognito();
 
-
-
 // ----------------------------
-// Click Processing
+// Click Processing DEBUG
 // ----------------------------
 
 const button = document.getElementById("clickButton");
 
 const clickResult = document.getElementById("clickResult");
 
-let detectedEvents = [];
-let clickStartTime = 0;
-let analysisTimer;
+let events = [];
 
 
-const trackedEvents = [
+const eventsToTrack = [
     "mouseover",
     "mouseenter",
-    "pointermove",
     "mousemove",
+    "pointermove",
+    "pointerdown",
     "mousedown",
+    "pointerup",
     "mouseup",
     "click"
 ];
 
 
-trackedEvents.forEach(eventName => {
+eventsToTrack.forEach(type => {
 
-    button.addEventListener(eventName, function(event){
+    button.addEventListener(type, function(event){
 
-
-        if(eventName === "mouseover"){
-            detectedEvents = [];
-            clickStartTime = Date.now();
-        }
-
-
-        if(!detectedEvents.includes(eventName)){
-            detectedEvents.push(eventName);
-        }
-
-
-        clearTimeout(analysisTimer);
-
-
-        analysisTimer = setTimeout(() => {
-
-
-            let hasMouseSequence =
-                detectedEvents.includes("mousemove") ||
-                detectedEvents.includes("pointermove") ||
-                detectedEvents.includes("mouseenter");
-
-
-            if(hasMouseSequence){
-
-                clickResult.innerHTML =
-`
-🟢 JavaScript Click Processing behavior detected
-
-Observed:
-
-${detectedEvents.map(e=>"✓ " + e).join("<br>")}
-
-
-Result:
-
-DOM event sequence detected before click.
-`;
-
-                updateSummary(
-                    "summaryClicks",
-                    "🟢",
-                    "JavaScript behavior detected"
-                );
-
-
-            } else {
-
-
-                clickResult.innerHTML =
-`
-🟢 OS Mouse Click Processing behavior detected
-
-Observed:
-
-${detectedEvents.map(e=>"✓ " + e).join("<br>")}
-
-
-Result:
-
-Native mouse-like click sequence detected.
-`;
-
-                updateSummary(
-                    "summaryClicks",
-                    "🟢",
-                    "OS Mouse behavior detected"
-                );
-
-            }
-
-
-        }, 300);
+        events.push({
+            type: type,
+            trusted: event.isTrusted,
+            time: Date.now()
+        });
 
 
     });
 
 });
+
+
+button.addEventListener("click", function(event){
+
+    setTimeout(()=>{
+
+
+        clickResult.innerHTML =
+`
+<b>CLICK EVENT LOG</b>
+<br><br>
+
+${events.map(e =>
+`
+${e.type} 
+| trusted: ${e.trusted}
+`
+).join("<br>")}
+
+<br><br>
+
+Total events: ${events.length}
+`;
+
+
+        events = [];
+
+
+    },500);
+
+
+});
+
+
+
 
 // ----------------------------
 // Screenshot
