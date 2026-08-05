@@ -1,139 +1,331 @@
-body {
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-font-family: Arial, sans-serif;
+body{
 
-background:#f4f6f8;
+    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
 
-padding:30px;
+    background:#edf2f7;
 
-color:#222;
+    color:#2d3748;
+
+    padding:30px;
+
+    line-height:1.5;
 
 }
 
+header{
 
+    background:#2563eb;
 
-h1 {
+    color:white;
 
-margin-bottom:30px;
+    padding:25px;
 
-}
+    border-radius:12px;
 
+    margin-bottom:25px;
 
-
-.card {
-
-background:white;
-
-padding:20px;
-
-margin-bottom:25px;
-
-border-radius:10px;
-
-box-shadow:0 2px 8px rgba(0,0,0,0.15);
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
 
 }
 
+header h1{
 
+    font-size:32px;
 
-table {
+    margin-bottom:8px;
 
-border-collapse:collapse;
+}
+
+header p{
+
+    opacity:.9;
+
+}
+
+.summary{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+
+    gap:15px;
+
+    margin-bottom:30px;
+
+}
+
+.summary-card{
+
+    background:white;
+
+    border-radius:10px;
+
+    padding:18px;
+
+    text-align:center;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+
+    transition:.2s;
+
+}
+
+.summary-card:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.summary-card h3{
+
+    margin:10px 0 5px;
+
+    font-size:18px;
+
+}
+
+.summary-card p{
+
+    color:#666;
+
+    font-size:14px;
+
+}
+
+.status{
+
+    font-size:30px;
+
+}
+
+.card{
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:25px;
+
+    margin-bottom:25px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+
+.card h2{
+
+    margin-bottom:15px;
+
+    color:#2563eb;
+
+}
+
+.expected{
+
+    background:#f8fafc;
+
+    border-left:5px solid #2563eb;
+
+    padding:12px;
+
+    margin-bottom:20px;
+
+    color:#555;
+
+}
+
+.result{
+
+    background:#f4f4f4;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    margin-top:20px;
+
+    min-height:70px;
+
+    font-family:Consolas,monospace;
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+}
+
+td{
+
+    border:1px solid #ddd;
+
+    padding:10px;
+
+}
+
+td:first-child{
+
+    width:35%;
+
+    font-weight:bold;
+
+    background:#fafafa;
+
+}
+
+button{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:.2s;
+
+}
+
+button:hover{
+
+    background:#1d4ed8;
+
+}
+
+.marker{
+
+    text-align:center;
+
+    margin:30px 0;
+
+    color:#dc2626;
+
+}
+
+.bigSpace{
+
+    height:2400px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:linear-gradient(#ffffff,#f8fafc);
+
+    border:2px dashed #cbd5e1;
+
+    color:#777;
+
+    font-size:22px;
+
+}
+
+.opacity{
+
+    padding:18px;
+
+    margin:15px 0;
+
+    border-radius:8px;
+
+    border:1px solid #ccc;
+
+    font-weight:bold;
+
+}
+
+.opacity span{
+
+    float:right;
+
+    font-weight:normal;
+
+}
+
+.opacity100{
+
+    opacity:1;
+
+    background:#dbeafe;
+
+}
+
+.opacity50{
+
+    opacity:.5;
+
+    background:#fde68a;
+
+}
+
+.opacity0{
+
+    opacity:0;
+
+    background:#fecaca;
+
+}
+
+.waiting{
+
+    color:#f59e0b;
+
+}
+
+.success{
+
+    color:#16a34a;
+
+}
+
+.fail{
+
+    color:#dc2626;
+
+}
+
+@media(max-width:700px){
+
+.summary{
+
+grid-template-columns:1fr;
+
+}
+
+header h1{
+
+font-size:24px;
+
+}
+
+button{
 
 width:100%;
 
-margin-top:15px;
-
 }
-
-
-
-td {
-
-border:1px solid #ccc;
-
-padding:8px;
-
-}
-
-
-
-button {
-
-padding:10px 15px;
-
-cursor:pointer;
-
-}
-
-
-
-.result-box {
-
-margin-top:15px;
-
-padding:15px;
-
-background:#eee;
-
-}
-
-
-
-.big-space {
-
-height:2500px;
-
-padding:20px;
-
-background:#fafafa;
-
-}
-
-
-
-.screenshot-test {
-
-min-height:3000px;
-
-}
-
-
-
-.opacity-item {
-
-padding:20px;
-
-margin:15px 0;
-
-border:1px solid #999;
-
-background:#ddd;
-
-font-weight:bold;
-
-}
-
-
-
-.opacity-one {
-
-opacity:1;
-
-}
-
-
-
-.opacity-half {
-
-opacity:0.5;
-
-}
-
-
-
-.opacity-zero {
-
-opacity:0;
 
 }
