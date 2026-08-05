@@ -198,51 +198,85 @@
 
 <!-- OPACITY -->
 
+    <!-- OPACITY -->
+
 <section class="card">
 
-    <h2>👁️ Opacity Validation</h2>
+    <h2>👁️ Opacity Visibility Validation</h2>
 
     <p class="expected">
 
-        Used to validate:
+        Setting under test:
 
         <br>
 
-        "Use opacity to determine visibility of web elements"
+        <b>Use opacity to determine visibility of web elements</b>
+
+        <br><br>
+
+        Expected:
+
+        <br>
+        opacity: 1 → Visible
+        <br>
+        opacity: 0.5 → Visible
+        <br>
+        opacity: 0 → Invisible when opacity validation is enabled
 
     </p>
 
-    <div class="opacity opacity100">
 
-        Element A
+    <div class="opacity-test-container">
 
-        <span>opacity:1</span>
+
+        <button class="opacity-element opacity100"
+                id="opacityVisible">
+
+            VISIBLE ELEMENT
+
+            <span>
+                opacity: 1
+            </span>
+
+        </button>
+
+
+        <button class="opacity-element opacity50"
+                id="opacitySemi">
+
+            SEMI TRANSPARENT ELEMENT
+
+            <span>
+                opacity: 0.5
+            </span>
+
+        </button>
+
+
+        <button class="opacity-element opacity0"
+                id="opacityHidden">
+
+            INVISIBLE ELEMENT
+
+            <span>
+                opacity: 0
+            </span>
+
+        </button>
+
 
     </div>
 
-    <div class="opacity opacity50">
-
-        Element B
-
-        <span>opacity:0.5</span>
-
-    </div>
-
-    <div class="opacity opacity0">
-
-        Element C
-
-        <span>opacity:0</span>
-
-    </div>
 
     <div class="result" id="opacityResult">
 
-        Checking...
+        Waiting for interaction...
 
     </div>
 
+
 </section>
+
 
 <script src="script.js"></script>
 
