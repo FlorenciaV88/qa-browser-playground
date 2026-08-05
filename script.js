@@ -98,54 +98,61 @@ const headlessIndicators = {
 let detected = false;
 
 
-// webdriver is the strongest indicator
+let reasons = [];
+
+
+// webdriver alone is NOT enough
 if(navigator.webdriver === true){
+
+    reasons.push("webdriver");
+
+}
+
+
+// Headless Chrome usually has missing plugins
+if(navigator.plugins.length === 0){
+
+    reasons.push("no plugins");
+
+}
+
+
+// Headless often has no outer window size
+if(
+    window.outerWidth === 0 ||
+    window.outerHeight === 0
+){
+
+    reasons.push("missing outer window");
+
+}
+
+
+// Detect only if multiple indicators match
+if(reasons.length >= 2){
 
     detected = true;
 
 }
-
 
 headlessResult.innerHTML =
 
 `
 <b>Headless Mode Analysis</b>
 
+Indicators:
 
-webdriver:
+${reasons.length ? reasons.join(", ") : "none"}
 
-${headlessIndicators.webdriver}
+<br><br>
 
-
-plugins:
-
-${headlessIndicators.plugins}
-
-
-languages:
-
-${headlessIndicators.languages}
-
-
-window:
-
-${headlessIndicators.windowSize}
-
-
-outer window:
-
-${headlessIndicators.outerWindow}
-
-
-<br>
-
-
-${detected 
+${
+detected
 ? "🔴 Headless Mode: DETECTED"
-: "🟢 Headless Mode: NOT DETECTED"}
+: "🟢 Headless Mode: NOT DETECTED"
+}
 
 `;
-
 
 
 updateSummary(
