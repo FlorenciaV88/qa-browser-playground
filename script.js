@@ -198,11 +198,9 @@ detectIncognito();
 // Click Processing
 // ----------------------------
 
-// ----------------------------
-// Click Processing - Event Recorder Test
-// ----------------------------
+const button =
+document.getElementById("clickButton");
 
-const button = document.getElementById("clickButton");
 
 const clickEvents = [
     "mousemove",
@@ -221,39 +219,78 @@ let detectedEvents = [];
 
 clickEvents.forEach(eventName => {
 
-    button.addEventListener(eventName, () => {
+    button.addEventListener(eventName, (event) => {
+
 
         if(!detectedEvents.includes(eventName)){
             detectedEvents.push(eventName);
         }
 
 
-        document.getElementById("clickResult").innerHTML =
+        let result = "";
 
+
+        if(
+            detectedEvents.includes("mousemove") ||
+            detectedEvents.includes("pointermove") ||
+            detectedEvents.includes("mouseenter")
+        ){
+
+            result =
 `
-🖱️ CLICK EVENT RECORDER
+🟢 JavaScript click behavior detected
 
-Events detected:
+Evidence:
 
-${detectedEvents.map(e => "✅ " + e).join("<br>")}
+${detectedEvents.map(e=>"✓ "+e).join("<br>")}
 
+<br>
 
-Total events:
+Reason:
 
-${detectedEvents.length}
-
+DOM events sequence detected before click
 `;
+
+        }
+        else if(event.isTrusted){
+
+            result =
+`
+🟢 OS Mouse click behavior detected
+
+Evidence:
+
+✓ click
+
+✓ isTrusted: true
+
+✓ button: ${event.button}
+
+<br>
+
+Reason:
+
+Trusted native mouse event received
+`;
+
+        }
+
+
+        document.getElementById(
+            "clickResult"
+        ).innerHTML = result;
+
 
         updateSummary(
             "summaryClicks",
             "🟢",
-            "Events Captured"
+            "Click Behavior Detected"
         );
+
 
     });
 
 });
-
 
 // ----------------------------
 // Screenshot
