@@ -198,97 +198,78 @@ detectIncognito();
 // Click Processing
 // ----------------------------
 
+// ----------------------------
+// Click Processing
+// ----------------------------
+
 const button =
 document.getElementById("clickButton");
 
 
-const clickEvents = [
-    "mousemove",
-    "mouseover",
-    "mouseenter",
-    "pointermove",
-    "pointerdown",
-    "mousedown",
-    "mouseup",
-    "click"
-];
+button.addEventListener("click", (event) => {
 
 
-let detectedEvents = [];
+    let result = "";
 
 
-clickEvents.forEach(eventName => {
+    if(event.isTrusted){
 
-    button.addEventListener(eventName, (event) => {
-
-
-        if(!detectedEvents.includes(eventName)){
-            detectedEvents.push(eventName);
-        }
-
-
-        let result = "";
-
-
-        if(
-            detectedEvents.includes("mousemove") ||
-            detectedEvents.includes("pointermove") ||
-            detectedEvents.includes("mouseenter")
-        ){
-
-            result =
-`
-🟢 JavaScript click behavior detected
-
-Evidence:
-
-${detectedEvents.map(e=>"✓ "+e).join("<br>")}
-
-<br>
-
-Reason:
-
-DOM events sequence detected before click
-`;
-
-        }
-        else if(event.isTrusted){
-
-            result =
+        result =
 `
 🟢 OS Mouse click behavior detected
 
 Evidence:
 
-✓ click
+✓ click event
 
 ✓ isTrusted: true
 
 ✓ button: ${event.button}
 
-<br>
+✓ coordinates:
+${event.clientX}, ${event.clientY}
+
 
 Reason:
 
-Trusted native mouse event received
+Trusted browser mouse event received
 `;
 
-        }
+    } else {
 
 
-        document.getElementById(
-            "clickResult"
-        ).innerHTML = result;
+        result =
+`
+🟢 JavaScript click behavior detected
+
+Evidence:
+
+✓ click event
+
+✓ isTrusted: false
 
 
-        updateSummary(
-            "summaryClicks",
-            "🟢",
-            "Click Behavior Detected"
-        );
+Reason:
+
+Synthetic DOM click event received
+`;
+
+    }
 
 
-    });
+    document.getElementById(
+        "clickResult"
+    ).innerHTML = result;
+
+
+    updateSummary(
+        "summaryClicks",
+        "🟢",
+        event.isTrusted
+        ? "OS Mouse behavior detected"
+        : "JavaScript behavior detected"
+    );
+
 
 });
 
