@@ -198,45 +198,61 @@ detectIncognito();
 // Click Processing
 // ----------------------------
 
-const button =
-document.getElementById("clickButton");
+// ----------------------------
+// Click Processing - Event Recorder Test
+// ----------------------------
 
-button.addEventListener("click",(event)=>{
+const button = document.getElementById("clickButton");
 
-    document.getElementById("clickResult").innerHTML=
+const clickEvents = [
+    "mousemove",
+    "mouseover",
+    "mouseenter",
+    "pointermove",
+    "pointerdown",
+    "mousedown",
+    "mouseup",
+    "click"
+];
 
-`🟢 CLICK RECEIVED
 
-Type:
-${event.type}
+let detectedEvents = [];
 
-Trusted:
-${event.isTrusted}
 
-Button:
-${event.button}
+clickEvents.forEach(eventName => {
 
-Buttons:
-${event.buttons}
+    button.addEventListener(eventName, () => {
 
-Client:
-${event.clientX}, ${event.clientY}
+        if(!detectedEvents.includes(eventName)){
+            detectedEvents.push(eventName);
+        }
 
-Screen:
-${event.screenX}, ${event.screenY}
 
-TimeStamp:
-${Math.round(event.timeStamp)}
+        document.getElementById("clickResult").innerHTML =
+
+`
+🖱️ CLICK EVENT RECORDER
+
+Events detected:
+
+${detectedEvents.map(e => "✅ " + e).join("<br>")}
+
+
+Total events:
+
+${detectedEvents.length}
+
 `;
 
-    updateSummary(
-        "summaryClicks",
-        "🟢",
-        "Click Received"
-    );
+        updateSummary(
+            "summaryClicks",
+            "🟢",
+            "Events Captured"
+        );
+
+    });
 
 });
-
 
 
 // ----------------------------
