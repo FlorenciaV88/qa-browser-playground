@@ -343,46 +343,72 @@ ${error.message}`;
 // Opacity
 // ----------------------------
 
-function opacityCheck(){
+// ----------------------------
+// Opacity Visibility Test
+// ----------------------------
 
-    const list =
-    document.querySelectorAll(".opacity");
 
-    let html="";
+const opacityElements = document.querySelectorAll(
+    ".opacity-element"
+);
 
-    list.forEach((element,index)=>{
 
-        const opacity =
-        getComputedStyle(element).opacity;
+opacityElements.forEach(element => {
 
-        html+=
 
-`Element ${String.fromCharCode(65+index)}
+    element.addEventListener(
+        "click",
+        () => {
+
+
+            document.getElementById(
+                "opacityResult"
+            ).innerHTML =
+
+
+`🟢 ELEMENT CLICKED
+
+
+Element:
+
+${element.id}
+
 
 Opacity:
 
-${opacity}
+${getComputedStyle(element).opacity}
 
-Visible:
 
-${opacity>0}
+Visibility according to browser:
 
-------------------
+VISIBLE`;
 
-`;
 
-    });
 
-    document.getElementById(
-    "opacityResult"
-    ).innerText=html;
+            updateSummary(
+                "summaryOpacity",
+                "🟢",
+                "Interaction Received"
+            );
 
-    updateSummary(
-        "summaryOpacity",
-        "🟢",
-        "Checked"
+
+        }
     );
 
-}
 
-opacityCheck();
+});
+
+
+
+document.getElementById(
+"opacityResult"
+).innerHTML =
+
+
+`Ready.
+
+Test these elements with testRigor:
+
+opacityVisible
+opacitySemi
+opacityHidden`;
