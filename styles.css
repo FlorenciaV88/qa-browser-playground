@@ -329,3 +329,66 @@ width:100%;
 }
 
 }
+
+.opacity-test-container{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+.opacity-element{
+
+    height:60px;
+
+    border-radius:8px;
+
+    border:1px solid #ccc;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+
+.opacity-element span{
+
+    display:block;
+
+    font-size:12px;
+
+    font-weight:normal;
+
+}
+
+
+.opacity100{
+
+    opacity:1;
+
+    background:#bbf7d0;
+
+}
+
+
+.opacity50{
+
+    opacity:.5;
+
+    background:#fde68a;
+
+}
+
+
+.opacity0{
+
+    opacity:0;
+
+    background:#fecaca;
+
+}
