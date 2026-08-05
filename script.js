@@ -269,22 +269,26 @@ updateSummary(
 // ----------------------------
 // Geolocation Validation
 // ----------------------------
+const geoButton = document.getElementById("geoButton");
 
+if (geoButton) {
 
-const geoButton =
-document.getElementById("geoButton");
+    geoButton.addEventListener("click", () => {
 
+        console.log("Geolocation button clicked");
 
-geoButton.addEventListener(
-"click",
-checkGeolocation
-);
+        checkGeolocation();
+
+    });
+
+}
 
 
 
 async function checkGeolocation(){
 
-
+console.log("Starting geolocation check");
+    
 const status =
 document.getElementById("geoStatus");
 
