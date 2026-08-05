@@ -67,49 +67,92 @@ Object.entries(browserInfo).forEach(([key,value])=>{
 // Headless
 // ----------------------------
 
-let headlessScore = 0;
-
-if(navigator.webdriver)
-    headlessScore++;
-
-if(navigator.plugins.length===0)
-    headlessScore++;
-
-if(window.outerHeight===0)
-    headlessScore++;
+// ----------------------------
+// Headless Mode Detection
+// ----------------------------
 
 const headlessResult =
 document.getElementById("headlessResult");
 
-if(headlessScore>0){
 
-    headlessResult.innerHTML =
+const headlessIndicators = {
 
-`🔴 <b>Headless Mode: DETECTED</b>
+    webdriver:
+        navigator.webdriver,
 
-Headless indicators found:
-${headlessScore}`;
+    plugins:
+        navigator.plugins.length,
 
-    updateSummary(
-        "summaryHeadless",
-        "🔴",
-        "Detected"
-    );
+    languages:
+        navigator.languages.length,
 
-}else{
+    windowSize:
+        `${window.innerWidth} x ${window.innerHeight}`,
 
-    headlessResult.innerHTML =
+    outerWindow:
+        `${window.outerWidth} x ${window.outerHeight}`
 
-`🟢 <b>Headless Mode: NOT DETECTED</b>`;
+};
 
-    updateSummary(
-        "summaryHeadless",
-        "🟢",
-        "Not Detected"
-    );
+
+let detected = false;
+
+
+// webdriver is the strongest indicator
+if(navigator.webdriver === true){
+
+    detected = true;
 
 }
 
+
+headlessResult.innerHTML =
+
+`
+<b>Headless Mode Analysis</b>
+
+
+webdriver:
+
+${headlessIndicators.webdriver}
+
+
+plugins:
+
+${headlessIndicators.plugins}
+
+
+languages:
+
+${headlessIndicators.languages}
+
+
+window:
+
+${headlessIndicators.windowSize}
+
+
+outer window:
+
+${headlessIndicators.outerWindow}
+
+
+<br>
+
+
+${detected 
+? "🔴 Headless Mode: DETECTED"
+: "🟢 Headless Mode: NOT DETECTED"}
+
+`;
+
+
+
+updateSummary(
+    "summaryHeadless",
+    detected ? "🔴" : "🟢",
+    detected ? "Detected" : "Not Detected"
+);
 
 
 // ----------------------------
