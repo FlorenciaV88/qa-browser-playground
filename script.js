@@ -202,21 +202,27 @@ detectIncognito();
 // Click Processing
 // ----------------------------
 
-const button =
-document.getElementById("clickButton");
+const button = document.getElementById("clickButton");
+
+const clickResult = document.getElementById("clickResult");
 
 
-button.addEventListener("click", (event) => {
+clickResult.innerHTML = 
+`
+Waiting for click...
+`;
 
 
-    let result = "";
+button.onclick = function(event){
+
+    clickResult.innerHTML = "";
 
 
     if(event.isTrusted){
 
-        result =
+        clickResult.innerHTML =
 `
-🟢 OS Mouse click behavior detected
+🟢 OS Mouse behavior detected
 
 Evidence:
 
@@ -232,15 +238,22 @@ ${event.clientX}, ${event.clientY}
 
 Reason:
 
-Trusted browser mouse event received
+Browser received a trusted mouse interaction.
 `;
+
+        updateSummary(
+            "summaryClicks",
+            "🟢",
+            "OS Mouse behavior detected"
+        );
+
 
     } else {
 
 
-        result =
+        clickResult.innerHTML =
 `
-🟢 JavaScript click behavior detected
+🟢 JavaScript behavior detected
 
 Evidence:
 
@@ -251,27 +264,19 @@ Evidence:
 
 Reason:
 
-Synthetic DOM click event received
+Browser received a synthetic DOM click.
 `;
+
+        updateSummary(
+            "summaryClicks",
+            "🟢",
+            "JavaScript behavior detected"
+        );
 
     }
 
 
-    document.getElementById(
-        "clickResult"
-    ).innerHTML = result;
-
-
-    updateSummary(
-        "summaryClicks",
-        "🟢",
-        event.isTrusted
-        ? "OS Mouse behavior detected"
-        : "JavaScript behavior detected"
-    );
-
-
-});
+};
 
 // ----------------------------
 // Screenshot
