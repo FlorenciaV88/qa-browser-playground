@@ -1,359 +1,331 @@
-// ===============================
-// HEADLESS DETECTION
-// ===============================
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
+body{
 
-const info = {
+    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
 
-"webdriver":
-navigator.webdriver,
+    background:#edf2f7;
 
-"plugins":
-navigator.plugins.length,
+    color:#2d3748;
 
-"language":
-navigator.language,
+    padding:30px;
 
-"userAgent":
-navigator.userAgent,
-
-"window size":
-window.innerWidth + " x " + window.innerHeight
-
-};
-
-
-const table =
-document.getElementById("browserInfo");
-
-
-Object.entries(info).forEach(([key,value])=>{
-
-
-let row = table.insertRow();
-
-row.insertCell(0).innerText = key;
-
-row.insertCell(1).innerText = value;
-
-
-});
-
-
-
-let headlessScore = 0;
-
-
-if(navigator.webdriver)
-headlessScore++;
-
-
-if(navigator.plugins.length === 0)
-headlessScore++;
-
-
-
-document.getElementById(
-"headlessResult"
-).innerText =
-
-
-headlessScore > 0
-
-?
-
-"⚠️ Possible Headless Browser Detected"
-
-:
-
-"✅ Browser appears NOT headless";
-
-
-
-
-
-// ===============================
-// INCOGNITO DETECTION
-// ===============================
-
-
-async function detectIncognito(){
-
-
-const result =
-document.getElementById(
-"incognitoResult"
-);
-
-
-
-try {
-
-
-const storage =
-await navigator.storage.estimate();
-
-
-
-if(storage.quota &&
-storage.quota < 1200000000){
-
-
-result.innerText =
-"⚠️ Possible Incognito Mode";
-
+    line-height:1.5;
 
 }
 
-else {
+header{
 
+    background:#2563eb;
 
-result.innerText =
-"✅ Normal Browser Mode";
+    color:white;
 
+    padding:25px;
 
-}
+    border-radius:12px;
 
+    margin-bottom:25px;
 
-
-}
-
-catch(error){
-
-
-result.innerText =
-"Unable to detect";
-
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
 
 }
 
+header h1{
+
+    font-size:32px;
+
+    margin-bottom:8px;
 
 }
 
+header p{
 
-detectIncognito();
-
-
-
-
-
-// ===============================
-// CLICK VALIDATION
-// ===============================
-
-
-const clickButton =
-document.getElementById(
-"clickButton"
-);
-
-
-
-clickButton.addEventListener(
-"click",
-function(event){
-
-
-document.getElementById(
-"clickResult"
-).innerHTML =
-
-
-`
-<b>Click received</b><br><br>
-
-Event trusted:
-${event.isTrusted}
-
-<br>
-
-Event type:
-${event.type}
-
-<br>
-
-Coordinates:
-X ${event.clientX}
-Y ${event.clientY}
-
-`;
-
-
-
-});
-
-
-
-
-
-// ===============================
-// SCREENSHOT
-// ===============================
-
-
-document.getElementById(
-"screenshotResult"
-).innerText =
-
-"Page height: "
-+
-document.body.scrollHeight
-+
-" px";
-
-
-
-
-
-// ===============================
-// GEOLOCATION
-// ===============================
-
-
-async function checkGeolocation(){
-
-
-const output =
-document.getElementById(
-"geoResult"
-);
-
-
-
-if(!navigator.geolocation){
-
-
-output.innerText =
-"Geolocation not supported";
-
-
-return;
+    opacity:.9;
 
 }
 
+.summary{
 
+    display:grid;
 
-navigator.geolocation.getCurrentPosition(
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
 
+    gap:15px;
 
-(position)=>{
-
-
-output.innerHTML =
-
-`
-Permission: GRANTED
-
-<br>
-
-Latitude:
-${position.coords.latitude}
-
-<br>
-
-Longitude:
-${position.coords.longitude}
-
-`;
-
-
-
-},
-
-
-(error)=>{
-
-
-output.innerHTML =
-
-`
-Permission: DENIED
-
-<br>
-
-${error.message}
-
-`;
-
+    margin-bottom:30px;
 
 }
 
+.summary-card{
 
-);
+    background:white;
 
+    border-radius:10px;
 
-}
+    padding:18px;
 
+    text-align:center;
 
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
 
-
-
-
-// ===============================
-// OPACITY
-// ===============================
-
-
-function checkOpacity(){
-
-
-const elements =
-document.querySelectorAll(
-".opacity-item"
-);
-
-
-
-let result = "";
-
-
-
-elements.forEach((element,index)=>{
-
-
-const opacity =
-window.getComputedStyle(
-element
-).opacity;
-
-
-
-const visible =
-opacity > 0;
-
-
-
-result +=
-
-`
-Element ${index+1}
-
-<br>
-
-Opacity:
-${opacity}
-
-<br>
-
-Visible:
-${visible}
-
-<br><br>
-
-`;
-
-
-});
-
-
-
-document.getElementById(
-"opacityResult"
-).innerHTML = result;
-
+    transition:.2s;
 
 }
 
+.summary-card:hover{
 
+    transform:translateY(-3px);
 
-checkOpacity();
+}
+
+.summary-card h3{
+
+    margin:10px 0 5px;
+
+    font-size:18px;
+
+}
+
+.summary-card p{
+
+    color:#666;
+
+    font-size:14px;
+
+}
+
+.status{
+
+    font-size:30px;
+
+}
+
+.card{
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:25px;
+
+    margin-bottom:25px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+
+}
+
+.card h2{
+
+    margin-bottom:15px;
+
+    color:#2563eb;
+
+}
+
+.expected{
+
+    background:#f8fafc;
+
+    border-left:5px solid #2563eb;
+
+    padding:12px;
+
+    margin-bottom:20px;
+
+    color:#555;
+
+}
+
+.result{
+
+    background:#f4f4f4;
+
+    border-radius:8px;
+
+    padding:15px;
+
+    margin-top:20px;
+
+    min-height:70px;
+
+    font-family:Consolas,monospace;
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+}
+
+td{
+
+    border:1px solid #ddd;
+
+    padding:10px;
+
+}
+
+td:first-child{
+
+    width:35%;
+
+    font-weight:bold;
+
+    background:#fafafa;
+
+}
+
+button{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:.2s;
+
+}
+
+button:hover{
+
+    background:#1d4ed8;
+
+}
+
+.marker{
+
+    text-align:center;
+
+    margin:30px 0;
+
+    color:#dc2626;
+
+}
+
+.bigSpace{
+
+    height:2400px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:linear-gradient(#ffffff,#f8fafc);
+
+    border:2px dashed #cbd5e1;
+
+    color:#777;
+
+    font-size:22px;
+
+}
+
+.opacity{
+
+    padding:18px;
+
+    margin:15px 0;
+
+    border-radius:8px;
+
+    border:1px solid #ccc;
+
+    font-weight:bold;
+
+}
+
+.opacity span{
+
+    float:right;
+
+    font-weight:normal;
+
+}
+
+.opacity100{
+
+    opacity:1;
+
+    background:#dbeafe;
+
+}
+
+.opacity50{
+
+    opacity:.5;
+
+    background:#fde68a;
+
+}
+
+.opacity0{
+
+    opacity:0;
+
+    background:#fecaca;
+
+}
+
+.waiting{
+
+    color:#f59e0b;
+
+}
+
+.success{
+
+    color:#16a34a;
+
+}
+
+.fail{
+
+    color:#dc2626;
+
+}
+
+@media(max-width:700px){
+
+.summary{
+
+grid-template-columns:1fr;
+
+}
+
+header h1{
+
+font-size:24px;
+
+}
+
+button{
+
+width:100%;
+
+}
+
+}
