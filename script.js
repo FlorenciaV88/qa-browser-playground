@@ -266,91 +266,177 @@ updateSummary(
 // Geolocation
 // ----------------------------
 
+// ----------------------------
+// Geolocation Validation
+// ----------------------------
+
+
+const geoButton =
+document.getElementById("geoButton");
+
+
+geoButton.addEventListener(
+"click",
+checkGeolocation
+);
+
+
+
 async function checkGeolocation(){
 
-    const result =
-    document.getElementById(
-        "geoResult"
-    );
 
-    if(
-        !navigator.geolocation
-    ){
+const status =
+document.getElementById("geoStatus");
 
-        result.innerHTML=
-        "Not supported";
 
-        return;
+const coordinates =
+document.getElementById("geoCoordinates");
 
-    }
 
-    if(navigator.permissions){
 
-        try{
+status.innerText =
+"GEOLOCATION_STATUS: CHECKING";
 
-            const permission =
-            await navigator.permissions.query({
-                name:"geolocation"
-            });
 
-            result.innerHTML=
+coordinates.innerText =
+"COORDINATES: WAITING";
 
-`Permission
 
-${permission.state.toUpperCase()}
 
-Waiting for location...`;
+if(!navigator.geolocation){
 
-        }
 
-        catch{}
+status.innerText =
+"GEOLOCATION_STATUS: NOT_SUPPORTED";
 
-    }
 
-    navigator.geolocation.getCurrentPosition(
+return;
 
-        position=>{
-
-            result.innerHTML=
-
-`🟢 GRANTED
-
-Latitude
-
-${position.coords.latitude}
-
-Longitude
-
-${position.coords.longitude}`;
-
-            updateSummary(
-                "summaryGeo",
-                "🟢",
-                "Granted"
-            );
-
-        },
-
-        error=>{
-
-            result.innerHTML=
-
-`🔴 DENIED
-
-${error.message}`;
-
-            updateSummary(
-                "summaryGeo",
-                "🔴",
-                "Denied"
-            );
-
-        }
-
-    );
 
 }
 
+
+
+if(navigator.permissions){
+
+
+try{
+
+
+const permission =
+await navigator.permissions.query({
+name:"geolocation"
+});
+
+
+
+if(permission.state === "denied"){
+
+
+status.innerText =
+"GEOLOCATION_STATUS: DENIED";
+
+
+updateSummary(
+"summaryGeo",
+"🔴",
+"Denied"
+);
+
+
+return;
+
+
+}
+
+
+
+if(permission.state === "prompt"){
+
+
+status.innerText =
+"GEOLOCATION_STATUS: PROMPT";
+
+
+}
+
+
+
+}catch(e){}
+
+}
+
+
+
+navigator.geolocation.getCurrentPosition(
+
+
+(position)=>{
+
+
+status.innerText =
+"GEOLOCATION_STATUS: GRANTED";
+
+
+coordinates.innerText =
+
+`COORDINATES:
+
+LATITUDE:
+${position.coords.latitude}
+
+LONGITUDE:
+${position.coords.longitude}`;
+
+
+
+updateSummary(
+"summaryGeo",
+"🟢",
+"Granted"
+);
+
+
+
+},
+
+
+(error)=>{
+
+
+if(error.code === 1){
+
+
+status.innerText =
+"GEOLOCATION_STATUS: DENIED";
+
+
+updateSummary(
+"summaryGeo",
+"🔴",
+"Denied"
+);
+
+
+
+}else{
+
+
+status.innerText =
+"GEOLOCATION_STATUS: ERROR";
+
+
+}
+
+
+
+}
+
+
+);
+
+
+}
 
 
 // ----------------------------
