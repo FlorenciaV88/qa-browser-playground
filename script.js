@@ -202,86 +202,103 @@ const button = document.getElementById("clickButton");
 
 const clickResult = document.getElementById("clickResult");
 
-let clickTimer;
+let detectedEvents = [];
+let clickStartTime = 0;
+let analysisTimer;
 
 
-button.addEventListener("click", function(event){
+const trackedEvents = [
+    "mouseover",
+    "mouseenter",
+    "pointermove",
+    "mousemove",
+    "mousedown",
+    "mouseup",
+    "click"
+];
 
 
-    // Clear previous result
-    clearTimeout(clickTimer);
+trackedEvents.forEach(eventName => {
 
-    clickResult.innerHTML =
-    `
-    Analyzing click...
-    `;
+    button.addEventListener(eventName, function(event){
 
 
-    // Small delay to avoid duplicated events
-    clickTimer = setTimeout(() => {
-
-
-        if(event.isTrusted){
-
-            clickResult.innerHTML =
-`
-🟢 OS Mouse behavior detected
-
-Evidence:
-
-✓ click event
-
-✓ isTrusted: true
-
-✓ button: ${event.button}
-
-✓ coordinates:
-${event.clientX}, ${event.clientY}
-
-
-Reason:
-
-Trusted browser mouse event received.
-`;
-
-            updateSummary(
-                "summaryClicks",
-                "🟢",
-                "OS Mouse behavior detected"
-            );
-
-
-        } else {
-
-
-            clickResult.innerHTML =
-`
-🟢 JavaScript behavior detected
-
-Evidence:
-
-✓ click event
-
-✓ isTrusted: false
-
-
-Reason:
-
-Synthetic DOM event received.
-`;
-
-            updateSummary(
-                "summaryClicks",
-                "🟢",
-                "JavaScript behavior detected"
-            );
-
-
+        if(eventName === "mouseover"){
+            detectedEvents = [];
+            clickStartTime = Date.now();
         }
 
 
-    }, 200);
+        if(!detectedEvents.includes(eventName)){
+            detectedEvents.push(eventName);
+        }
 
+
+        clearTimeout(analysisTimer);
+
+
+        analysisTimer = setTimeout(() => {
+
+
+            let hasMouseSequence =
+                detectedEvents.includes("mousemove") ||
+                detectedEvents.includes("pointermove") ||
+                detectedEvents.includes("mouseenter");
+
+
+            if(hasMouseSequence){
+
+                clickResult.innerHTML =
+`
+🟢 JavaScript Click Processing behavior detected
+
+Observed:
+
+${detectedEvents.map(e=>"✓ " + e).join("<br>")}
+
+
+Result:
+
+DOM event sequence detected before click.
+`;
+
+                updateSummary(
+                    "summaryClicks",
+                    "🟢",
+                    "JavaScript behavior detected"
+                );
+
+
+            } else {
+
+
+                clickResult.innerHTML =
+`
+🟢 OS Mouse Click Processing behavior detected
+
+Observed:
+
+${detectedEvents.map(e=>"✓ " + e).join("<br>")}
+
+
+Result:
+
+Native mouse-like click sequence detected.
+`;
+
+                updateSummary(
+                    "summaryClicks",
+                    "🟢",
+                    "OS Mouse behavior detected"
+                );
+
+            }
+
+
+        }, 300);
+
+
+    });
 
 });
 
