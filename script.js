@@ -1,331 +1,388 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+// =====================================================
+// Browser Settings Validation Dashboard
+// =====================================================
 
-body{
 
-    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+// ----------------------------
+// Summary helpers
+// ----------------------------
 
-    background:#edf2f7;
+function updateSummary(id, emoji, text){
 
-    color:#2d3748;
+    const card = document.getElementById(id);
 
-    padding:30px;
+    card.querySelector(".status").innerHTML = emoji;
 
-    line-height:1.5;
-
-}
-
-header{
-
-    background:#2563eb;
-
-    color:white;
-
-    padding:25px;
-
-    border-radius:12px;
-
-    margin-bottom:25px;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.15);
+    card.querySelector("p").innerText = text;
 
 }
 
-header h1{
 
-    font-size:32px;
 
-    margin-bottom:8px;
+// ----------------------------
+// Browser Information
+// ----------------------------
 
-}
+const browserInfo = {
 
-header p{
+    "User Agent": navigator.userAgent,
 
-    opacity:.9;
+    "Language": navigator.language,
 
-}
+    "Platform": navigator.platform,
 
-.summary{
+    "webdriver": navigator.webdriver,
 
-    display:grid;
+    "Plugins": navigator.plugins.length,
 
-    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    "Cookies Enabled": navigator.cookieEnabled,
 
-    gap:15px;
+    "Screen":
 
-    margin-bottom:30px;
+        screen.width + " x " + screen.height,
 
-}
+    "Window":
 
-.summary-card{
+        window.innerWidth + " x " + window.innerHeight
 
-    background:white;
+};
 
-    border-radius:10px;
 
-    padding:18px;
 
-    text-align:center;
+const table = document.getElementById("browserInfo");
 
-    box-shadow:0 2px 8px rgba(0,0,0,.08);
+Object.entries(browserInfo).forEach(([key,value])=>{
 
-    transition:.2s;
+    const row = table.insertRow();
 
-}
+    row.insertCell().innerText = key;
 
-.summary-card:hover{
+    row.insertCell().innerText = value;
 
-    transform:translateY(-3px);
+});
 
-}
 
-.summary-card h3{
 
-    margin:10px 0 5px;
+// ----------------------------
+// Headless
+// ----------------------------
 
-    font-size:18px;
+let headlessScore = 0;
 
-}
+if(navigator.webdriver)
+    headlessScore++;
 
-.summary-card p{
+if(navigator.plugins.length===0)
+    headlessScore++;
 
-    color:#666;
+if(window.outerHeight===0)
+    headlessScore++;
 
-    font-size:14px;
+const headlessResult =
+document.getElementById("headlessResult");
 
-}
+if(headlessScore>0){
 
-.status{
+    headlessResult.innerHTML =
 
-    font-size:30px;
+`🔴 <b>Headless Mode: DETECTED</b>
 
-}
+Headless indicators found:
+${headlessScore}`;
 
-.card{
+    updateSummary(
+        "summaryHeadless",
+        "🔴",
+        "Detected"
+    );
 
-    background:white;
+}else{
 
-    border-radius:12px;
+    headlessResult.innerHTML =
 
-    padding:25px;
+`🟢 <b>Headless Mode: NOT DETECTED</b>`;
 
-    margin-bottom:25px;
-
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
-
-}
-
-.card h2{
-
-    margin-bottom:15px;
-
-    color:#2563eb;
-
-}
-
-.expected{
-
-    background:#f8fafc;
-
-    border-left:5px solid #2563eb;
-
-    padding:12px;
-
-    margin-bottom:20px;
-
-    color:#555;
+    updateSummary(
+        "summaryHeadless",
+        "🟢",
+        "Not Detected"
+    );
 
 }
 
-.result{
 
-    background:#f4f4f4;
 
-    border-radius:8px;
+// ----------------------------
+// Incognito
+// ----------------------------
 
-    padding:15px;
+async function detectIncognito(){
 
-    margin-top:20px;
+    const result =
+    document.getElementById(
+        "incognitoResult"
+    );
 
-    min-height:70px;
+    try{
 
-    font-family:Consolas,monospace;
+        const estimate =
+        await navigator.storage.estimate();
 
-    white-space:pre-wrap;
+        if(
+            estimate.quota &&
+            estimate.quota < 1200000000
+        ){
 
-    word-break:break-word;
+            result.innerHTML =
 
-}
+`🔴 <b>Incognito Mode: DETECTED</b>
 
-table{
+Storage quota:
 
-    width:100%;
+${Math.round(estimate.quota/1024/1024)} MB`;
 
-    border-collapse:collapse;
+            updateSummary(
+                "summaryIncognito",
+                "🔴",
+                "Detected"
+            );
 
-    margin-top:20px;
+        }else{
 
-}
+            result.innerHTML =
 
-td{
+`🟢 <b>Incognito Mode: NOT DETECTED</b>
 
-    border:1px solid #ddd;
+Storage quota:
 
-    padding:10px;
+${Math.round(estimate.quota/1024/1024)} MB`;
 
-}
+            updateSummary(
+                "summaryIncognito",
+                "🟢",
+                "Not Detected"
+            );
 
-td:first-child{
+        }
 
-    width:35%;
+    }
 
-    font-weight:bold;
+    catch{
 
-    background:#fafafa;
+        result.innerHTML =
+        "Unable to detect.";
 
-}
-
-button{
-
-    background:#2563eb;
-
-    color:white;
-
-    border:none;
-
-    padding:12px 20px;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    font-size:15px;
-
-    transition:.2s;
+    }
 
 }
 
-button:hover{
+detectIncognito();
 
-    background:#1d4ed8;
+
+
+// ----------------------------
+// Click Processing
+// ----------------------------
+
+const button =
+document.getElementById("clickButton");
+
+button.addEventListener("click",(event)=>{
+
+    document.getElementById("clickResult").innerHTML=
+
+`🟢 CLICK RECEIVED
+
+Type:
+${event.type}
+
+Trusted:
+${event.isTrusted}
+
+Button:
+${event.button}
+
+Buttons:
+${event.buttons}
+
+Client:
+${event.clientX}, ${event.clientY}
+
+Screen:
+${event.screenX}, ${event.screenY}
+
+TimeStamp:
+${Math.round(event.timeStamp)}
+`;
+
+    updateSummary(
+        "summaryClicks",
+        "🟢",
+        "Click Received"
+    );
+
+});
+
+
+
+// ----------------------------
+// Screenshot
+// ----------------------------
+
+document.getElementById(
+"screenshotResult"
+).innerHTML=
+
+`Current page height
+
+${document.body.scrollHeight}px
+
+Verify if the Bottom Marker
+appears in the screenshot.`;
+
+updateSummary(
+"summaryScreenshot",
+"🟢",
+"Ready"
+);
+
+
+
+// ----------------------------
+// Geolocation
+// ----------------------------
+
+async function checkGeolocation(){
+
+    const result =
+    document.getElementById(
+        "geoResult"
+    );
+
+    if(
+        !navigator.geolocation
+    ){
+
+        result.innerHTML=
+        "Not supported";
+
+        return;
+
+    }
+
+    if(navigator.permissions){
+
+        try{
+
+            const permission =
+            await navigator.permissions.query({
+                name:"geolocation"
+            });
+
+            result.innerHTML=
+
+`Permission
+
+${permission.state.toUpperCase()}
+
+Waiting for location...`;
+
+        }
+
+        catch{}
+
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        position=>{
+
+            result.innerHTML=
+
+`🟢 GRANTED
+
+Latitude
+
+${position.coords.latitude}
+
+Longitude
+
+${position.coords.longitude}`;
+
+            updateSummary(
+                "summaryGeo",
+                "🟢",
+                "Granted"
+            );
+
+        },
+
+        error=>{
+
+            result.innerHTML=
+
+`🔴 DENIED
+
+${error.message}`;
+
+            updateSummary(
+                "summaryGeo",
+                "🔴",
+                "Denied"
+            );
+
+        }
+
+    );
 
 }
 
-.marker{
 
-    text-align:center;
 
-    margin:30px 0;
+// ----------------------------
+// Opacity
+// ----------------------------
 
-    color:#dc2626;
+function opacityCheck(){
 
-}
+    const list =
+    document.querySelectorAll(".opacity");
 
-.bigSpace{
+    let html="";
 
-    height:2400px;
+    list.forEach((element,index)=>{
 
-    display:flex;
+        const opacity =
+        getComputedStyle(element).opacity;
 
-    justify-content:center;
+        html+=
 
-    align-items:center;
+`Element ${String.fromCharCode(65+index)}
 
-    background:linear-gradient(#ffffff,#f8fafc);
+Opacity:
 
-    border:2px dashed #cbd5e1;
+${opacity}
 
-    color:#777;
+Visible:
 
-    font-size:22px;
+${opacity>0}
 
-}
+------------------
 
-.opacity{
+`;
 
-    padding:18px;
+    });
 
-    margin:15px 0;
+    document.getElementById(
+    "opacityResult"
+    ).innerText=html;
 
-    border-radius:8px;
-
-    border:1px solid #ccc;
-
-    font-weight:bold;
-
-}
-
-.opacity span{
-
-    float:right;
-
-    font-weight:normal;
+    updateSummary(
+        "summaryOpacity",
+        "🟢",
+        "Checked"
+    );
 
 }
 
-.opacity100{
-
-    opacity:1;
-
-    background:#dbeafe;
-
-}
-
-.opacity50{
-
-    opacity:.5;
-
-    background:#fde68a;
-
-}
-
-.opacity0{
-
-    opacity:0;
-
-    background:#fecaca;
-
-}
-
-.waiting{
-
-    color:#f59e0b;
-
-}
-
-.success{
-
-    color:#16a34a;
-
-}
-
-.fail{
-
-    color:#dc2626;
-
-}
-
-@media(max-width:700px){
-
-.summary{
-
-grid-template-columns:1fr;
-
-}
-
-header h1{
-
-font-size:24px;
-
-}
-
-button{
-
-width:100%;
-
-}
-
-}
+opacityCheck();
