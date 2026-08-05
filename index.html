@@ -160,41 +160,59 @@
 
 <!-- GEOLOCATION -->
 
+    <!-- GEOLOCATION -->
+
 <section class="card">
 
     <h2>📍 Geolocation</h2>
 
     <p class="expected">
 
-        Expected:
+        Setting under test:
 
         <br>
 
-        Allow → GRANTED
+        <b>Get geolocation permission</b>
+
+        <br><br>
+
+        Expected behavior:
 
         <br>
-
-        Block → DENIED
+        Allow → GEOLOCATION_STATUS: GRANTED
 
         <br>
+        Block → GEOLOCATION_STATUS: DENIED
 
-        Ask → PROMPT
+        <br>
+        Ask → GEOLOCATION_STATUS: PROMPT
 
     </p>
 
-    <button onclick="checkGeolocation()">
+
+    <button id="geoButton">
 
         Check Geolocation
 
     </button>
 
-    <div class="result" id="geoResult">
 
-        Waiting...
+    <div class="result" id="geoStatus">
+
+        GEOLOCATION_STATUS: WAITING
 
     </div>
 
+
+    <div class="result" id="geoCoordinates">
+
+        COORDINATES: NOT_AVAILABLE
+
+    </div>
+
+
 </section>
+
 
 <!-- OPACITY -->
 
