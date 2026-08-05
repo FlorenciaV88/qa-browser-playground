@@ -126,7 +126,6 @@ updateSummary(
     headlessDetected ? "Detected" : "Not Detected"
 );
 
-`;
 // ----------------------------
 // Incognito
 // ----------------------------
