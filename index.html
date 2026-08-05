@@ -2,188 +2,249 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Settings Validation Dashboard</title>
 
-<title>QA Browser Playground</title>
-
-<link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<h1>QA Browser Playground</h1>
+<header>
+    <h1>🖥️ Browser Settings Validation Dashboard</h1>
+    <p>Manual validation tool for testRigor browser execution settings</p>
+</header>
 
+<section class="summary">
+
+    <div class="summary-card" id="summaryHeadless">
+        <span class="status waiting">🟡</span>
+        <h3>Headless</h3>
+        <p>Waiting</p>
+    </div>
+
+    <div class="summary-card" id="summaryIncognito">
+        <span class="status waiting">🟡</span>
+        <h3>Incognito</h3>
+        <p>Waiting</p>
+    </div>
+
+    <div class="summary-card" id="summaryClicks">
+        <span class="status waiting">🟡</span>
+        <h3>Clicks</h3>
+        <p>Waiting</p>
+    </div>
+
+    <div class="summary-card" id="summaryScreenshot">
+        <span class="status waiting">🟡</span>
+        <h3>Screenshot</h3>
+        <p>Ready</p>
+    </div>
+
+    <div class="summary-card" id="summaryGeo">
+        <span class="status waiting">🟡</span>
+        <h3>Geolocation</h3>
+        <p>Waiting</p>
+    </div>
+
+    <div class="summary-card" id="summaryOpacity">
+        <span class="status waiting">🟡</span>
+        <h3>Opacity</h3>
+        <p>Waiting</p>
+    </div>
+
+</section>
 
 <!-- HEADLESS -->
 
 <section class="card">
 
-<h2>1. Headless Mode Detection</h2>
+    <h2>🖥️ Headless Mode</h2>
 
-<div id="headlessResult">
-Checking...
-</div>
+    <p class="expected">
+        Expected:
+        DETECTED when Headless Mode is enabled.
+        NOT DETECTED when disabled.
+    </p>
 
-<table id="browserInfo"></table>
+    <div class="result" id="headlessResult">
+        Checking...
+    </div>
+
+    <table id="browserInfo"></table>
 
 </section>
-
-
 
 <!-- INCOGNITO -->
 
 <section class="card">
 
-<h2>2. Incognito Mode Detection</h2>
+    <h2>🕶️ Incognito Mode</h2>
 
-<div id="incognitoResult">
-Checking...
-</div>
+    <p class="expected">
+        Expected:
+        DETECTED when browser runs in Incognito.
+        NOT DETECTED otherwise.
+    </p>
+
+    <div class="result" id="incognitoResult">
+        Checking...
+    </div>
 
 </section>
 
-
-
-
-<!-- CLICKS -->
+<!-- CLICK -->
 
 <section class="card">
 
-<h2>3. Click Processing Validation</h2>
+    <h2>🖱️ Click Processing</h2>
 
-<p>
-Click the button using testRigor with:
-<br>
-- Using JavaScript
-<br>
-- Using OS Mouse
-</p>
+    <p class="expected">
+        Execute this button using:
+        <br>
+        • Using JavaScript
+        <br>
+        • Using OS Mouse
+    </p>
 
+    <button id="clickButton">
+        Click Validation Button
+    </button>
 
-<button id="clickButton">
-Click Validation Button
-</button>
+    <div class="result" id="clickResult">
 
+        Waiting for click...
 
-<div class="result-box">
-
-<p id="clickResult">
-Waiting for click...
-</p>
-
-</div>
-
+    </div>
 
 </section>
-
-
-
-
 
 <!-- SCREENSHOT -->
 
-<section class="card screenshot-test">
+<section class="card screenshot">
 
-<h2>4. Screenshot Validation</h2>
+    <h2>📷 Screenshot Validation</h2>
 
+    <p class="expected">
+        Expected:
+        <br>
+        Full Page Screenshot → Bottom marker visible.
+        <br>
+        Regular Screenshot → Bottom marker NOT visible.
+    </p>
 
-<h3 id="topMarker">
-===== TOP MARKER =====
-</h3>
+    <h1 class="marker">
+        ===== TOP MARKER =====
+    </h1>
 
+    <div class="bigSpace">
 
-<div class="big-space">
+        Scroll until the bottom.
 
-Scroll area for full page screenshot validation
+        <br><br>
 
-</div>
+        This area intentionally contains a large amount of whitespace.
 
+    </div>
 
-<h3 id="bottomMarker">
-===== BOTTOM MARKER =====
-</h3>
+    <h1 class="marker">
+        ===== BOTTOM MARKER =====
+    </h1>
 
+    <div class="result" id="screenshotResult">
 
-<p id="screenshotResult">
-Page height:
-</p>
-
+    </div>
 
 </section>
-
-
-
-
 
 <!-- GEOLOCATION -->
 
 <section class="card">
 
-<h2>5. Geolocation Validation</h2>
+    <h2>📍 Geolocation</h2>
 
+    <p class="expected">
 
-<button onclick="checkGeolocation()">
-Check Geolocation
-</button>
+        Expected:
 
+        <br>
 
-<div id="geoResult">
-Waiting...
-</div>
+        Allow → GRANTED
 
+        <br>
+
+        Block → DENIED
+
+        <br>
+
+        Ask → PROMPT
+
+    </p>
+
+    <button onclick="checkGeolocation()">
+
+        Check Geolocation
+
+    </button>
+
+    <div class="result" id="geoResult">
+
+        Waiting...
+
+    </div>
 
 </section>
-
-
-
-
 
 <!-- OPACITY -->
 
 <section class="card">
 
-<h2>6. Opacity Visibility Validation</h2>
+    <h2>👁️ Opacity Validation</h2>
 
+    <p class="expected">
 
-<div class="opacity-item opacity-one">
+        Used to validate:
 
-Element opacity 1
+        <br>
 
-</div>
+        "Use opacity to determine visibility of web elements"
 
+    </p>
 
+    <div class="opacity opacity100">
 
-<div class="opacity-item opacity-half">
+        Element A
 
-Element opacity 0.5
+        <span>opacity:1</span>
 
-</div>
+    </div>
 
+    <div class="opacity opacity50">
 
+        Element B
 
-<div class="opacity-item opacity-zero">
+        <span>opacity:0.5</span>
 
-Element opacity 0
+    </div>
 
-</div>
+    <div class="opacity opacity0">
 
+        Element C
 
-<div id="opacityResult">
+        <span>opacity:0</span>
 
-Checking visibility...
+    </div>
 
-</div>
+    <div class="result" id="opacityResult">
 
+        Checking...
+
+    </div>
 
 </section>
-
-
-
-
 
 <script src="script.js"></script>
 
 </body>
-
 </html>
