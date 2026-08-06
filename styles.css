@@ -392,3 +392,89 @@ width:100%;
     background:#fecaca;
 
 }
+
+/* =====================================================
+   Click Processing Challenge
+===================================================== */
+
+#clickChallenge{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:80px;
+
+    margin:25px 0;
+
+}
+
+.checkpoint{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:50%;
+
+    border:3px solid #999;
+
+    background:#ececec;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    user-select:none;
+
+}
+
+.checkpoint.active{
+
+    background:#2ecc71;
+
+    border-color:#27ae60;
+
+    color:white;
+
+    transform:scale(1.12);
+
+}
+
+#clickButton{
+
+    margin-top:15px;
+
+    width:100%;
+
+}
+
+#clickButton:disabled{
+
+    opacity:.45;
+
+    cursor:not-allowed;
+
+}
+
+#clickResult{
+
+    margin-top:18px;
+
+    white-space:pre-line;
+
+    font-family:monospace;
+
+}
