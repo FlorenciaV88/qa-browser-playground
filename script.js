@@ -183,57 +183,75 @@ detectIncognito();
 // Click Processing
 // ----------------------------
 
-const clickOverlay = document.getElementById("clickOverlay");
-const clickButton = document.getElementById("clickButton");
+const mouseTarget = document.getElementById("mouseTarget");
 const clickResult = document.getElementById("clickResult");
 
+let mouseEvents = [];
 
-// Overlay receives click
 
-clickOverlay.addEventListener("click", (event)=>{
+function updateMouseResult(){
 
     clickResult.innerHTML =
 
 `
-🔴 CLICK INTERCEPTED BY OVERLAY
+🖱️ Mouse interaction received
 
-Target:
-Overlay
 
-Event:
-${event.type}
+Events:
 
-Trusted:
-${event.isTrusted}
+${mouseEvents.join("\n")}
 
-Result:
-Physical mouse interaction reached overlay.
+
+Validation:
+
+${
+mouseEvents.includes("mousedown") &&
+mouseEvents.includes("mouseup") &&
+mouseEvents.includes("click")
+?
+"🟢 PASS - Full mouse sequence detected"
+:
+"🔴 FAIL - Incomplete mouse sequence"
+}
+
 `;
+
+}
+
+
+mouseTarget.addEventListener("mousedown", (event)=>{
+
+    mouseEvents.push(
+        "✅ mousedown"
+    );
+
+    mouseTarget.classList.add("pressed");
+
+    updateMouseResult();
 
 });
 
 
-// Button receives click
+mouseTarget.addEventListener("mouseup", (event)=>{
 
-clickButton.addEventListener("click", (event)=>{
+    mouseEvents.push(
+        "✅ mouseup"
+    );
 
-    clickResult.innerHTML =
+    mouseTarget.classList.remove("pressed");
 
-`
-🟢 CLICK REACHED TARGET BUTTON
+    updateMouseResult();
 
-Target:
-Button
+});
 
-Event:
-${event.type}
 
-Trusted:
-${event.isTrusted}
+mouseTarget.addEventListener("click", (event)=>{
 
-Result:
-Click reached the button element.
-`;
+    mouseEvents.push(
+        "✅ click"
+    );
+
+    updateMouseResult();
 
 });
 
