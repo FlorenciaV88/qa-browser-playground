@@ -183,76 +183,59 @@ detectIncognito();
 // Click Processing
 // ----------------------------
 
-const checkpoint1 = document.getElementById("checkpoint1");
-const checkpoint2 = document.getElementById("checkpoint2");
-const checkpoint3 = document.getElementById("checkpoint3");
-
+const clickOverlay = document.getElementById("clickOverlay");
 const clickButton = document.getElementById("clickButton");
 const clickResult = document.getElementById("clickResult");
 
-let currentStep = 0;
 
+// Overlay receives click
 
-// STEP 1
-checkpoint1.addEventListener("mouseenter", () => {
-
-    if(currentStep !== 0) return;
-
-    currentStep = 1;
-
-    checkpoint1.classList.add("active");
+clickOverlay.addEventListener("click", (event)=>{
 
     clickResult.innerHTML =
+
 `
-✅ Checkpoint 1 completed
+🔴 CLICK INTERCEPTED BY OVERLAY
+
+Target:
+Overlay
+
+Event:
+${event.type}
+
+Trusted:
+${event.isTrusted}
+
+Result:
+Physical mouse interaction reached overlay.
 `;
 
 });
 
 
-// STEP 2
-checkpoint2.addEventListener("mouseenter", () => {
+// Button receives click
 
-    if(currentStep !== 1) return;
-
-    currentStep = 2;
-
-    checkpoint2.classList.add("active");
+clickButton.addEventListener("click", (event)=>{
 
     clickResult.innerHTML =
-`
-✅ Checkpoint 1 completed
 
-✅ Checkpoint 2 completed
+`
+🟢 CLICK REACHED TARGET BUTTON
+
+Target:
+Button
+
+Event:
+${event.type}
+
+Trusted:
+${event.isTrusted}
+
+Result:
+Click reached the button element.
 `;
 
 });
-
-
-// STEP 3
-checkpoint3.addEventListener("mouseenter", () => {
-
-    if(currentStep !== 2) return;
-
-    currentStep = 3;
-
-    checkpoint3.classList.add("active");
-
-    clickButton.disabled = false;
-
-    clickResult.innerHTML =
-`
-✅ Checkpoint 1 completed
-
-✅ Checkpoint 2 completed
-
-✅ Checkpoint 3 completed
-
-🟢 Validation button unlocked
-`;
-
-});
-
 
 // ----------------------------
 // Screenshot
