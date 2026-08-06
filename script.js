@@ -62,19 +62,6 @@ Object.entries(browserInfo).forEach(([key,value])=>{
 });
 
 
-
-// ----------------------------
-// Headless
-// ----------------------------
-
-// ----------------------------
-// Headless Mode Detection
-// ----------------------------
-
-// ----------------------------
-// Headless Mode Detection - DEBUG
-// ----------------------------
-
 // ----------------------------
 // Headless Mode Detection
 // ----------------------------
@@ -193,77 +180,78 @@ ${Math.round(estimate.quota/1024/1024)} MB`;
 detectIncognito();
 
 // ----------------------------
-// Click Processing DEBUG
+// Click Processing
 // ----------------------------
 
-const button = document.getElementById("clickButton");
+const checkpoint1 = document.getElementById("checkpoint1");
+const checkpoint2 = document.getElementById("checkpoint2");
+const checkpoint3 = document.getElementById("checkpoint3");
 
+const clickButton = document.getElementById("clickButton");
 const clickResult = document.getElementById("clickResult");
 
-let events = [];
+let currentStep = 0;
 
 
-const eventsToTrack = [
-    "mouseover",
-    "mouseenter",
-    "mousemove",
-    "pointermove",
-    "pointerdown",
-    "mousedown",
-    "pointerup",
-    "mouseup",
-    "click"
-];
+// STEP 1
+checkpoint1.addEventListener("mouseenter", () => {
 
+    if(currentStep !== 0) return;
 
-eventsToTrack.forEach(type => {
+    currentStep = 1;
 
-    button.addEventListener(type, function(event){
+    checkpoint1.classList.add("active");
 
-        events.push({
-            type: type,
-            trusted: event.isTrusted,
-            time: Date.now()
-        });
-
-
-    });
-
-});
-
-
-button.addEventListener("click", function(event){
-
-    setTimeout(()=>{
-
-
-        clickResult.innerHTML =
+    clickResult.innerHTML =
 `
-<b>CLICK EVENT LOG</b>
-<br><br>
-
-${events.map(e =>
-`
-${e.type} 
-| trusted: ${e.trusted}
-`
-).join("<br>")}
-
-<br><br>
-
-Total events: ${events.length}
+✅ Checkpoint 1 completed
 `;
 
+});
 
-        events = [];
 
+// STEP 2
+checkpoint2.addEventListener("mouseenter", () => {
 
-    },500);
+    if(currentStep !== 1) return;
 
+    currentStep = 2;
+
+    checkpoint2.classList.add("active");
+
+    clickResult.innerHTML =
+`
+✅ Checkpoint 1 completed
+
+✅ Checkpoint 2 completed
+`;
 
 });
 
 
+// STEP 3
+checkpoint3.addEventListener("mouseenter", () => {
+
+    if(currentStep !== 2) return;
+
+    currentStep = 3;
+
+    checkpoint3.classList.add("active");
+
+    clickButton.disabled = false;
+
+    clickResult.innerHTML =
+`
+✅ Checkpoint 1 completed
+
+✅ Checkpoint 2 completed
+
+✅ Checkpoint 3 completed
+
+🟢 Validation button unlocked
+`;
+
+});
 
 
 // ----------------------------
