@@ -98,26 +98,42 @@
 
 <section class="card">
 
-    <h2>🖱️ Click Processing</h2>
+    
+    <h2>🖱️ Click Processing Validation</h2>
 
-    <p class="expected">
-        Execute this button using:
-        <br>
-        • Using JavaScript
-        <br>
-        • Using OS Mouse
-    </p>
+<p>
+Complete the pointer path to unlock the validation button.
+</p>
 
-    <button id="clickButton">
-        Click Validation Button
-    </button>
+<div id="clickChallenge">
 
-    <div class="result" id="clickResult">
-
-        Waiting for click...
-
+    <div id="checkpoint1" class="checkpoint">
+        1
     </div>
 
+    <div id="checkpoint2" class="checkpoint">
+        2
+    </div>
+
+    <div id="checkpoint3" class="checkpoint">
+        3
+    </div>
+
+</div>
+
+<button
+    id="clickButton"
+    disabled
+>
+    Validate Click
+</button>
+
+<div id="clickResult" class="result">
+
+Waiting for pointer interaction...
+
+</div>
+   
 </section>
 
 <!-- SCREENSHOT -->
