@@ -472,3 +472,55 @@ width:100%;
     text-align:center;
 
 }
+
+/* =====================================================
+   Mouse Interaction Validation
+===================================================== */
+
+#mouseTarget{
+
+    width:300px;
+
+    height:120px;
+
+    margin:30px auto;
+
+    background:#dbeafe;
+
+    border:3px dashed #2563eb;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    user-select:none;
+
+    transition:.2s;
+
+}
+
+
+#mouseTarget:hover{
+
+    background:#bfdbfe;
+
+}
+
+
+#mouseTarget.pressed{
+
+    background:#bbf7d0;
+
+    border-color:#16a34a;
+
+}
