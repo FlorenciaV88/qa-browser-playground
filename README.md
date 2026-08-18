@@ -47,25 +47,7 @@ Expected usage:
 
 ---
 
-## 3. Click Processing Validation
-
-Used to validate TestRigor click processing options:
-
-- Using JavaScript
-- Using OS Mouse
-
-The playground captures:
-
-- Click event received
-- Event type
-- Event trust status
-- Mouse coordinates
-
-This helps identify differences between browser-generated and JavaScript-triggered interactions.
-
----
-
-## 4. Screenshot Validation
+## 3. Screenshot Validation
 
 Provides a long page layout with clear markers:
 
@@ -88,7 +70,7 @@ Expected behavior:
 
 ---
 
-## 5. Geolocation Validation
+## 4. Geolocation Validation
 
 Tests browser geolocation permissions:
 
@@ -106,7 +88,7 @@ Displays:
 
 ---
 
-## 6. Opacity Visibility Validation
+## 5. Opacity Visibility Validation
 
 Provides elements with different opacity values:
 
