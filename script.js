@@ -185,20 +185,27 @@ detectIncognito();
 
 let clickStartTime = null;
 
+const clickTestButton =
+    document.getElementById("clickTestButton");
+
 const clickTestResult =
     document.getElementById("clickTestResult");
 
-document.addEventListener(
+
+clickTestButton.addEventListener(
     "mousedown",
     () => {
 
         clickStartTime = Date.now();
 
-    },
-    true
+        clickTestResult.innerHTML =
+            "Mouse down detected...";
+
+    }
 );
 
-document.addEventListener(
+
+clickTestButton.addEventListener(
     "click",
     () => {
 
@@ -214,22 +221,23 @@ document.addEventListener(
                 ? "USE JAVASCRIPT"
                 : "USE OS MOUSE";
 
+
         clickTestResult.innerHTML =
 
 `
 <b>CLICK PROCESSING DETECTED</b>
 
-Interaction time:
+Duration:
 ${duration} ms
 
 Detected strategy:
 <b>${detectedStrategy}</b>
 `;
 
+
         clickStartTime = null;
 
-    },
-    true
+    }
 );
 
 // ----------------------------
