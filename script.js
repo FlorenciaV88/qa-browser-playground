@@ -179,6 +179,58 @@ ${Math.round(estimate.quota/1024/1024)} MB`;
 
 detectIncognito();
 
+// ----------------------------
+// Click Processing - Timing
+// ----------------------------
+
+let clickStartTime = null;
+
+const clickTestResult =
+    document.getElementById("clickTestResult");
+
+document.addEventListener(
+    "mousedown",
+    () => {
+
+        clickStartTime = Date.now();
+
+    },
+    true
+);
+
+document.addEventListener(
+    "click",
+    () => {
+
+        if (clickStartTime === null) {
+            return;
+        }
+
+        const duration =
+            Date.now() - clickStartTime;
+
+        const detectedStrategy =
+            duration < 20
+                ? "USE JAVASCRIPT"
+                : "USE OS MOUSE";
+
+        clickTestResult.innerHTML =
+
+`
+<b>CLICK PROCESSING DETECTED</b>
+
+Interaction time:
+${duration} ms
+
+Detected strategy:
+<b>${detectedStrategy}</b>
+`;
+
+        clickStartTime = null;
+
+    },
+    true
+);
 
 // ----------------------------
 // Screenshot
