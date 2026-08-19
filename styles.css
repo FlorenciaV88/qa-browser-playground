@@ -398,7 +398,5 @@ width:100%;
 ===================================================== */
 
 #hiddenClickButton {
-    position: absolute;
-    left: -10000px;
-    top: 0;
+    visibility: hidden;
 }
