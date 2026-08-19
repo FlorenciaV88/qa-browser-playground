@@ -221,20 +221,22 @@ clickTestButton.addEventListener(
                 ? "USE JAVASCRIPT"
                 : "USE OS MOUSE";
 
-
-        clickTestResult.innerHTML =
+clickTestResult.innerHTML =
 
 `
 <b>CLICK PROCESSING DETECTED</b>
 
-Duration:
+Interaction time:
 ${duration} ms
 
 Detected strategy:
 <b>${detectedStrategy}</b>
+
+Expected:
+Less than 20 ms → Use JavaScript
+20 ms or more → Use OS Mouse
 `;
-
-
+        
         clickStartTime = null;
 
     }
